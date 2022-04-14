@@ -4,11 +4,12 @@ entries:
     - annotations:
       apiVersion: v2
       appVersion: 1.92.0
+      home: https://kubecost.io
       created: "2022-04-12T09:32:03.559303-07:00"
       description:
         A Helm chart that sets up Kubecost, Prometheus, and Grafana to monitor
         cloud costs.
       name: cost-analyzer
       urls:
-        - cost-analyzer-1.92.0.tgz
+        - https://kubecost.github.io/openshift-helm-chart/cost-analyzer-1.92.0.tgz
       version: 1.92.0
