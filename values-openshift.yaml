@@ -1,0 +1,14 @@
+kubecostProductConfigs:
+  clusterName: CLUSTER_NAME
+prometheus:
+  nodeExporter:
+    enabled: false
+  serviceAccounts:
+    nodeExporter:
+      create: false
+  server:
+    global:
+      external_labels:
+        cluster_id: CLUSTER_NAME
+networkCosts:
+  enabled: false

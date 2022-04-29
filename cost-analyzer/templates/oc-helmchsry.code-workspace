@@ -1,0 +1,13 @@
+{
+  "folders": [
+	{
+		"name": "cost-analyzer",
+		"path": "../../../../../../Downloads/cost-analyzer"
+	},
+	{
+		"name": "cost-analyzer-helm-chart",
+		"path": "../.."
+	}
+],
+  "settings": {}
+}
