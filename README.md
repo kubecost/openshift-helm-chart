@@ -15,7 +15,7 @@ In this solution, Kubecost is installed with Cost Analyzer and Prometheus as a t
 
 The standard deployment is illustrated in the following diagram:
 
-![Standard deployment](images/standard.png)
+![Standard deployment](images/standard-lightbg.png)
 
 ### Grafana managed Prometheus deployment:
 
@@ -23,7 +23,7 @@ In this solution, Kubecost is installed with the core components only (cost mode
 
 The Grafana managed Prometheus deployment is illustrated in the following diagram:
 
-![Grafana managed Prometheus deployment](images/grafana-agent.png)
+![Grafana managed Prometheus deployment](images/grafana-agent-lightbg.png)
 
 ---
 ## Usage
@@ -60,9 +60,11 @@ Kubecost will be collecting data, please wait 5-15 minutes before the UI to refl
 
 #### Installation:
 
-1. Clone this repository to your dev environment.
+##### 1. Clone this repository to your dev environment.
    
-2. Install the Grafana Agent on your cluster. On the existing K8s cluster that you intend to install Kubecost, run the following commands to install grafana agent to scrape the metrics from Kubecost /metrics end point. The script below installs Grafana agent with necessary scraping configuration for Kubecost, you may want to add additional scrape configuration for your set up. Please remember to replace these following values by your actual Grafana cloud's values:
+##### 2. Install the Grafana Agent on your cluster. 
+
+On the existing K8s cluster that you intend to install Kubecost, run the following commands to install grafana agent to scrape the metrics from Kubecost /metrics end point. The script below installs Grafana agent with necessary scraping configuration for Kubecost, you may want to add additional scrape configuration for your set up. Please remember to replace these following values by your actual Grafana cloud's values:
 
 - REPLACE-WITH-GRAFANA-PROM-REMOTE-WRITE-ENDPOINT
 - REPLACE-WITH-GRAFANA-PROM-REMOTE-WRITE-USERNAME
@@ -72,7 +74,7 @@ Kubecost will be collecting data, please wait 5-15 minutes before the UI to refl
 <details>
   <summary>Click to see code</summary>
 
-```Bash
+```yaml
 cat <<'EOF' |
 
 kind: ConfigMap
@@ -383,11 +385,11 @@ MANIFEST_URL=https://raw.githubusercontent.com/linhlam-kc/agent/main/production/
 
 To learn more about how to install and config Grafana agent as well as additional scrape configuration, please refer to [Grafana Agent for Kubernetes](https://grafana.com/docs/grafana-cloud/kubernetes/agent-k8s/k8s_agent_metrics/) section of the Grafana Cloud documentation. Or you can check Kubecost Prometheus scrape config at this [Github repository](https://github.com/kubecost/cost-analyzer-helm-chart/blob/ebe7e088debecd23f90e6dd75b425828901a246c/cost-analyzer/charts/prometheus/values.yaml#L1152)
 
-3. Verify if grafana-agent is scraping data successfully:
+##### 3. Verify if grafana-agent is scraping data successfully:
 
 `kubectl -n kubecost logs grafana-agent-0`
 
-4. Create dbsecret to allow Kubecots to query the metrics from Grafana Cloud Prometheus:
+##### 4. Create dbsecret to allow Kubecots to query the metrics from Grafana Cloud Prometheus:
 
 - Create two files in your working directory, called `USERNAME` and `PASSWORD` respectively
   
@@ -415,7 +417,7 @@ kubectl create secret generic dbsecret \
 ```Bash
 kubectl -n kubecost get secret dbsecret -o json | jq '.data | map_values(@base64d)'
 ```
-5. (optional): Configure Kubecost recording rules for Grafana Cloud using cortextool
+##### 5. (optional): Configure Kubecost recording rules for Grafana Cloud using cortextool
 
 To set up recording rules in Grafana Cloud, download the [cortextool CLI utility](https://github.com/grafana/cortex-tools). While they are optional, they offer improved performance.
 
@@ -462,7 +464,7 @@ EOF
 ```
 </details>
 
-Then, making sure you are in the same directory as your \_kubecost\_rules.yaml\_, load the rules using `cortextool`. Replace address with your Grafana Cloud’s Prometheus endpoint (Remember to omit the /api/prom path from the endpoint URL).
+Then, making sure you are in the same directory as your \_kubecost\_rules.yaml\_, load the rules using `cortextool`. Replace the address with your Grafana Cloud’s Prometheus endpoint (Remember to omit the /api/prom path from the endpoint URL).
 
 ```Bash
 cortextool rules load \
@@ -480,11 +482,11 @@ cortextool rules print \
 --id=<REPLACE-WITH-GRAFANA-PROM-REMOTE-WRITE-USERNAME> \
 --key=<REPLACE-WITH-GRAFANA-PROM-REMOTE-WRITE-API-KEY>
 ```
-6. Install Kubecost on the cluster:
+##### 6. Install Kubecost on the cluster:
 
-Install Kubecost on your K8s cluster with Grafana Cloud Prometheus query endpoint and `dbsecret` we created in step 2
+Install Kubecost on your K8s cluster with Grafana Cloud Prometheus query endpoint and `dbsecret` you created in Step 4
 
-```bash
+```Bash
 
 helm upgrade -i -n kubecost kubecost ./cost-analyzer \
     --set global.prometheus.fqdn=https://<REPLACE-WITH-GRAFANA-PROM-QUERY-ENDPOINT> \
