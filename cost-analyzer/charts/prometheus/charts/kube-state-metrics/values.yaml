@@ -52,8 +52,7 @@ prometheus:
 ##
 podSecurityPolicy:
   enabled: false
-  annotations:
-    {}
+  annotations: {}
     ## Specify pod annotations
     ## Ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#apparmor
     ## Ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#seccomp
@@ -63,7 +62,11 @@ podSecurityPolicy:
     # seccomp.security.alpha.kubernetes.io/defaultProfileName: 'docker/default'
     # apparmor.security.beta.kubernetes.io/defaultProfileName: 'runtime/default'
 
+
 securityContext: {}
+  # enabled: true
+  # runAsUser: 65534
+  # fsGroup: 65534
 
 ## Node labels for pod assignment
 ## Ref: https://kubernetes.io/docs/user-guide/node-selection/

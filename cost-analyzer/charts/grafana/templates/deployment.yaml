@@ -37,7 +37,9 @@ spec:
 {{- if .Values.schedulerName }}
       schedulerName: "{{ .Values.schedulerName }}"
 {{- end }}
-      securityContext: {}
+{{- if .Values.securityContext }}
+      securityContext:
+{{ toYaml .Values.securityContext | indent 8 }}
 {{- end }}
 {{- if .Values.dashboards }}
       initContainers:
@@ -271,3 +273,4 @@ spec:
             secretName: {{ .secretName }}
             defaultMode: {{ .defaultMode }}
       {{- end }}
+{{ end }}

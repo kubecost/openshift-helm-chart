@@ -1,0 +1,46 @@
+<mxfile host="65bd71144e">
+    <diagram id="zClVkiExIjvdF5oHtpx5" name="Page-1">
+        <mxGraphModel dx="1099" dy="824" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="2" value="Openshift cluster" style="swimlane;" vertex="1" parent="1">
+                    <mxGeometry x="190" y="80" width="440" height="390" as="geometry"/>
+                </mxCell>
+                <mxCell id="3" value="Kubecost Project" style="swimlane;" vertex="1" parent="2">
+                    <mxGeometry x="75" y="50" width="290" height="300" as="geometry"/>
+                </mxCell>
+                <mxCell id="10" value="" style="edgeStyle=none;html=1;" edge="1" parent="3" source="4" target="7">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="4" value="" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" vertex="1" parent="3">
+                    <mxGeometry x="120" y="195" width="60" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="5" value="" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="3">
+                    <mxGeometry x="60" y="45" width="180" height="105" as="geometry"/>
+                </mxCell>
+                <mxCell id="6" value="Front End" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="3">
+                    <mxGeometry x="112.5" y="55" width="75" height="35" as="geometry"/>
+                </mxCell>
+                <mxCell id="7" value="Cost Model" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="3">
+                    <mxGeometry x="112.5" y="105" width="75" height="35" as="geometry"/>
+                </mxCell>
+                <mxCell id="8" value="Prometheus" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="3">
+                    <mxGeometry x="112.5" y="275" width="80" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="9" value="" style="endArrow=classic;html=1;" edge="1" parent="3">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="130" y="190" as="sourcePoint"/>
+                        <mxPoint x="130" y="160" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="11" value="" style="endArrow=classic;html=1;" edge="1" parent="3">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="170.5" y="160" as="sourcePoint"/>
+                        <mxPoint x="170" y="190" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

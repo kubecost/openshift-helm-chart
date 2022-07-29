@@ -36,6 +36,8 @@ image:
   #   - myRegistrKeySecretName
 
 securityContext: {}
+  # runAsUser: 472
+  # fsGroup: 472
 
 downloadDashboardsImage:
   repository: curlimages/curl
@@ -60,8 +62,7 @@ service:
 
 ingress:
   enabled: false
-  annotations:
-    {}
+  annotations: {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   labels: {}
@@ -126,8 +127,7 @@ envFromSecret: ""
 
 ## Additional grafana server secret mounts
 # Defines additional mounts with secrets. Secrets must be manually created in the namespace.
-extraSecretMounts:
-  []
+extraSecretMounts: []
   # - name: secret-files
   #   mountPath: /etc/secrets
   #   secretName: grafana-secret-files
@@ -135,8 +135,7 @@ extraSecretMounts:
 
 ## Pass the plugins you want installed as a list.
 ##
-plugins:
-  []
+plugins: []
   # - digrich-bubblechart-panel
   # - grafana-clock-panel
 
@@ -213,15 +212,15 @@ grafana.ini:
     url: https://grafana.net
   auth.anonymous:
     enabled: true
-    org_role: Editor
+    org_role:  Editor
     org_name: Main Org.
 
 ## LDAP Authentication can be enabled with the following values on grafana.ini
 ## NOTE: Grafana will fail to start if the value for ldap.toml is invalid
-# auth.ldap:
-#   enabled: true
-#   allow_sign_up: true
-#   config_file: /etc/grafana/ldap.toml
+  # auth.ldap:
+  #   enabled: true
+  #   allow_sign_up: true
+  #   config_file: /etc/grafana/ldap.toml
 
 ## Grafana's LDAP configuration
 ## Templated by the template in _helpers.tpl
@@ -259,12 +258,12 @@ sidecar:
   image: kiwigrid/k8s-sidecar:1.15.4
   imagePullPolicy: IfNotPresent
   resources:
-  #   limits:
-  #     cpu: 100m
-  #     memory: 100Mi
-  #   requests:
-  #     cpu: 50m
-  #     memory: 50Mi
+#   limits:
+#     cpu: 100m
+#     memory: 100Mi
+#   requests:
+#     cpu: 50m
+#     memory: 50Mi
   dashboards:
     enabled: false
     # label that the configmaps with dashboards are marked with

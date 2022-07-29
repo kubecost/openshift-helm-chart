@@ -110,8 +110,7 @@ store:
     # Set up ingress for the http service
     ingress:
       enabled: false
-      annotations:
-        {}
+      annotations: {}
         # kubernetes.io/ingress.class: nginx
       # kubernetes.io/tls-acme: "true"
       labels: {}
@@ -124,6 +123,9 @@ store:
       #      - chart-example.local
   # Optional securityContext
   securityContext: {}
+    # fsGroup: 1001
+    # runAsNonRoot: true
+    # runAsUser: 1001
 
   resources: {}
   #  limits:
@@ -181,7 +183,7 @@ queryFrontend:
     validity: 10m
 
   downstreamTripper:
-    enabled: false
+    enabled: false 
     idleConnectionTimeout: 90s
     responseHeaderTimeout: 2m
     tlsHandshakeTimeout: 10s
@@ -192,7 +194,7 @@ queryFrontend:
 
   # Downstream Tripper Configuration Content
   # downstreamTripperConfig:
-
+    
   # Response cache configuration content
   # responseCacheConfig:
 
@@ -223,12 +225,11 @@ queryFrontend:
     targetMemoryUtilizationPercentage: 50
   # Enable podDisruptionBudget for query component
   podDisruptionBudget:
-    enabled:
-      false
+    enabled: false
       # minAvailable and maxUnavailable can't be used simultaneous. Choose one.
     minAvailable: 1
     #  maxUnavailable: 50%
-
+  
   serviceAccount: ""
 
   # The http endpoint to communicate with other components
@@ -246,8 +247,7 @@ queryFrontend:
     # Set up ingress for the http service
     ingress:
       enabled: false
-      annotations:
-        {}
+      annotations: {}
         # kubernetes.io/ingress.class: nginx
         # kubernetes.io/tls-acme: "true"
       labels: {}
@@ -295,6 +295,9 @@ queryFrontend:
 
   # Optional securityContext
   securityContext: {}
+    # fsGroup: 1001
+    # runAsNonRoot: true
+    # runAsUser: 1001
 
   resources: {}
   #  limits:
@@ -320,7 +323,7 @@ queryFrontend:
   # Pod affinity
   # Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity
   affinity: {}
-
+      
 query:
   enabled: true
   # Label to treat as a replica indicator along which data is deduplicated.
@@ -348,9 +351,9 @@ query:
   maxConcurrent: 16
   # Maximum number of select requests made concurrently per a query.
   maxConcurrentSelect: 4
-  # Enable automatic adjustment (step / 5) to what source of data should be used in store gateways
+  # Enable automatic adjustment (step / 5) to what source of data should be used in store gateways 
   # if no max_source_resolution param is specified.
-  autoDownsampling: false
+  autoDownsampling: false                                        
   # https://github.com/improbable-eng/thanos/issues/1015
   storeDNSResolver: miekgdns
   # Enable DNS discovery for stores
@@ -390,8 +393,7 @@ query:
     targetMemoryUtilizationPercentage: 50
   # Enable podDisruptionBudget for query component
   podDisruptionBudget:
-    enabled:
-      false
+    enabled: false
       # minAvailable and maxUnavailable can't be used simultaneous. Choose one.
     minAvailable: 1
     #  maxUnavailable: 50%
@@ -411,8 +413,7 @@ query:
     # Set up ingress for the http service
     ingress:
       enabled: false
-      annotations:
-        {}
+      annotations: {}
         # kubernetes.io/ingress.class: nginx
         # kubernetes.io/tls-acme: "true"
       labels: {}
@@ -460,6 +461,9 @@ query:
 
   # Optional securityContext
   securityContext: {}
+    # fsGroup: 1001
+    # runAsNonRoot: true
+    # runAsUser: 1001
 
   resources: {}
   #  limits:
@@ -548,9 +552,9 @@ compact:
   #
   # Data volume for the compactor to store temporary data defaults to emptyDir
   # dataVolume:
-  #  persistentVolumeClaim:
-  #    claimName: compact-data-volume
-  #    storage: 100Gi
+    #  persistentVolumeClaim:
+    #    claimName: compact-data-volume
+    #    storage: 100Gi
   # Extra labels for compact pod template
   labels: {}
   #  cluster: example
@@ -587,6 +591,9 @@ compact:
 
   # Optional securityContext
   securityContext: {}
+    # fsGroup: 1001
+    # runAsNonRoot: true
+    # runAsUser: 1001
 
   resources: {}
   #  limits:
@@ -683,14 +690,16 @@ bucket:
 
   # Enable podDisruptionBudget for bucket component
   podDisruptionBudget:
-    enabled:
-      false
+    enabled: false
       # minAvailable and maxUnavailable can't be used simultaneous. Choose one.
     minAvailable: 1
     #  maxUnavailable: 50%
 
   # Optional securityContext
   securityContext: {}
+    # fsGroup: 1001
+    # runAsNonRoot: true
+    # runAsUser: 1001
 
   resources: {}
   #  limits:
@@ -769,8 +778,7 @@ sidecar:
     # Set up ingress for the http service
     ingress:
       enabled: false
-      annotations:
-        {}
+      annotations: {}
         # kubernetes.io/ingress.class: nginx
       # kubernetes.io/tls-acme: "true"
       labels: {}

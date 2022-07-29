@@ -42,7 +42,28 @@ spec:
 {{- end }}
 {{- end }}
     spec:
+      {{- if .Values.openshiftDeployment }}
       securityContext: {}
+      {{- if .Values.kubecostFrontend.tls }}
+      {{- if .Values.kubecostFrontend.tls.enabled }}
+      securityContext:
+        runAsUser: 0
+      {{- else }}
+      securityContext:
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
+      {{- end }}
+      {{- else if lt $nginxPort 1025 }}
+      securityContext:
+        runAsUser: 0
+      {{- end }}
+      {{- else }}
+      securityContext:
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
+      {{- end }}
       restartPolicy: Always
       serviceAccountName: {{ template "cost-analyzer.serviceAccountName" . }}
       volumes:
@@ -154,6 +175,18 @@ spec:
         {{- end }}
         {{- end }}
         {{- end }}
+        {{- if .Values.oidc }}
+        {{- if .Values.oidc.enabled }}
+        - name: oidc-config
+          configMap:
+            name: {{ template "cost-analyzer.fullname" . }}-oidc
+        {{- if .Values.oidc.secretName }}
+        - name: oidc-client-secret
+          secret:
+            secretName: {{ .Values.oidc.secretName }}
+        {{- end }}
+        {{- end }}
+        {{- end }}
         {{- if .Values.extraVolumes }}
         # Extra volume(s)
         {{- toYaml .Values.extraVolumes | nindent 8 }}
@@ -214,7 +247,12 @@ spec:
             - name: persistent-db
               mountPath: /var/db
             {{- end }}
+              {{- if .Values.openshiftDeployment }}
           securityContext: {}
+              {{- else }}
+          securityContext:
+            runAsUser: 0
+              {{- end }}
 {{ end }}
       containers:
         {{- if .Values.kubecostModel }}
@@ -316,7 +354,21 @@ spec:
             {{- end }}
             {{- end }}
             {{- end }}
+            {{- if .Values.oidc }}
+            {{- if .Values.oidc.enabled }}
+            - name: oidc-config
+              mountPath: /var/configs/oidc
+            {{- if .Values.oidc.secretName }}
+            - name: oidc-client-secret
+              mountPath: /var/configs/oidc-client-secret
+            {{- end }}
+            {{- end }}
+            {{- end }}
           env:
+            {{- if .Values.global.grafana }}
+            - name: GRAFANA_ENABLED
+              value: {{ (quote .Values.global.grafana.enabled) | default (quote false) }}
+            {{- end}}
             {{- if .Values.kubecostModel.extraEnv -}}
             {{ toYaml .Values.kubecostModel.extraEnv | nindent 12 }}
             {{- end }}
@@ -386,6 +438,10 @@ spec:
               value: {{ .Values.kubecostProductConfigs.productKey.mountPath }}
             {{- end }}
             {{- end }}
+            {{- if .Values.kubecostProductConfigs.ingestPodUID }}
+            - name: INGEST_POD_UID
+              value: {{ (quote .Values.kubecostProductConfigs.ingestPodUID) }}
+            {{- end }}
             {{- end }}
             - name: REMOTE_WRITE_PASSWORD
               value: {{ .Values.remoteWrite.postgres.auth.password }}
@@ -393,10 +449,6 @@ spec:
             - name: REMOTE_WRITE_ENABLED
               value: "true"
             {{- end }}
-            - name: GOGC
-              value: "60"
-            - name: GODEBUG
-              value: "madvdontneed=1"
             {{- if .Values.global.thanos.queryServiceBasicAuthSecretName}}
             - name: MC_BASIC_AUTH_USERNAME
               valueFrom:
@@ -501,6 +553,10 @@ spec:
               value: {{ (quote .Values.kubecostModel.warmSavingsCache) | default (quote true) }}
             - name: ETL_ENABLED
               value: {{ (quote .Values.kubecostModel.etl) | default (quote true) }}
+            {{- if .Values.kubecostModel.etlReadOnlyMode }}
+            - name: ETL_READ_ONLY
+              value: "true"
+            {{- end }}
             {{- if .Values.kubecostModel.etlBucketConfigSecret }}
             - name: ETL_TO_DISK_ENABLED
               value: "false"
@@ -512,9 +568,11 @@ spec:
             {{- end }}
             - name : ETL_CLOUD_USAGE_ENABLED
             {{- if kindIs "bool" .Values.kubecostModel.etlCloudUsage }}
-              value: {{ (quote .Values.kubecostModel.etlCloudUsage) | default (quote true) }}
+              value: {{ (quote .Values.kubecostModel.etlCloudUsage) }}
             {{- else if kindIs "bool" .Values.kubecostModel.etlCloudAsset }}
-              value: {{ (quote .Values.kubecostModel.etlCloudAsset) | default (quote true) }}
+              value: {{ (quote .Values.kubecostModel.etlCloudAsset) }}
+            {{- else }}
+              value: "true"
             {{- end }}
             - name: CLOUD_ASSETS_EXCLUDE_PROVIDER_ID
               value: {{ (quote .Values.kubecostModel.cloudAssetsExcludeProviderID) | default (quote false) }}
@@ -524,14 +582,14 @@ spec:
             {{- end }}
             - name: ETL_RESOLUTION_SECONDS
               value: {{ (quote .Values.kubecostModel.etlResolutionSeconds) | default (quote 300) }}
-            - name: ETL_MAX_BATCH_HOURS
-              value: {{ (quote .Values.kubecostModel.etlMaxBatchHours) | default (quote 6) }}
+            - name: ETL_MAX_PROMETHEUS_QUERY_DURATION_MINUTES
+              value: {{ (quote .Values.kubecostModel.maxPrometheusQueryDurationMinutes) | default (quote 1440) }}
             - name: ETL_DAILY_STORE_DURATION_DAYS
               value: {{ (quote .Values.kubecostModel.etlDailyStoreDurationDays) | default (quote 91) }}
             - name: ETL_HOURLY_STORE_DURATION_HOURS
               value: {{ (quote .Values.kubecostModel.etlHourlyStoreDurationHours) | default (quote 49) }}
             - name: ETL_FILE_STORE_ENABLED
-              value: {{ (quote .Values.kubecostModel.etlFileStoreEnabled) | default (quote false) }}
+              value: {{ (quote .Values.kubecostModel.etlFileStoreEnabled) | default (quote true) }}
             - name: ETL_ASSET_RECONCILIATION_ENABLED
               value: {{ (quote .Values.kubecostModel.etlAssetReconciliationEnabled) | default (quote true) }}
             - name: ETL_USE_UNBLENDED_COST
@@ -598,6 +656,10 @@ spec:
             {{- end }}
             {{- end }}
             {{- end }}
+            {{- if .Values.oidc.enabled }}
+            - name: OIDC_ENABLED
+              value: "true"
+            {{- end}}
             {{- if .Values.saml }}
             {{- if .Values.saml.enabled }}
             - name: SAML_ENABLED
@@ -654,6 +716,10 @@ spec:
             - name: PROM_CLUSTER_ID_LABEL
               value: {{ .Values.kubecostModel.promClusterIDLabel }}
             {{- end }}
+            {{- if .Values.reporting.googleAnalyticsTag }}
+            - name: GOOGLE_ANALYTICS_TAG
+              value: {{ .Values.reporting.googleAnalyticsTag }}
+            {{- end }}
             - name: RELEASE_NAME
               value: {{ .Release.Name }}
             - name: KUBECOST_NAMESPACE
@@ -669,7 +735,7 @@ spec:
         {{- else if .Values.imageVersion }}
         - image: {{ .Values.kubecostFrontend.image }}:{{ .Values.imageVersion }}
         {{- else }}
-        - image: {{ .Values.kubecostFrontend.image }}
+        - image: {{ .Values.kubecostFrontend.image }}:prod-{{ $.Chart.AppVersion }}
         {{ end }}
         {{- else }}
         - image: gcr.io/kubecost1/frontend:prod-{{ $.Chart.AppVersion }}

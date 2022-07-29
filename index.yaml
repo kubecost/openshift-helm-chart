@@ -1,13 +1,13 @@
 apiVersion: v1
 entries:
   cost-analyzer:
-    - created: 2022-04-12T09:32:03.559303-07:00
+    - created: 2022-07-29T09:32:03.559303-07:00
       description: A Helm chart that sets up Kubecost, Prometheus, and Grafana to monitor cloud costs.
       home: https://kubecost.io
       name: cost-analyzer
       sources:
         - https://kubecost.github.io/openshift-helm-chart
       urls:
-        - https://kubecost.github.io/openshift-helm-chart/cost-analyzer-1.92.0.tgz
-      version: 1.92.0
-generated: 2022-04-13T16:23:20.499029981-06:00
+        - https://kubecost.github.io/openshift-helm-chart/cost-analyzer-ocp-1.95.0.tgz
+      version: 1.95.0
+generated: 2022-07-29T16:23:20.499029981-06:00
