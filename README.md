@@ -489,6 +489,7 @@ Install Kubecost on your K8s cluster with Grafana Cloud Prometheus query endpoin
 ```Bash
 
 helm upgrade -i -n kubecost kubecost ./cost-analyzer \
+    --set kubecostModel.promClusterIDLabel=cluster \
     --set global.prometheus.fqdn=https://<REPLACE-WITH-GRAFANA-PROM-QUERY-ENDPOINT> \
     --set global.prometheus.enabled=false \
     --set global.prometheus.queryServiceBasicAuthSecretName=dbsecret
