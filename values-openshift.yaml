@@ -1,5 +1,7 @@
 kubecostProductConfigs:
   clusterName: CLUSTER_NAME
+  projectID: CLUSTER_NAME
+
 prometheus:
   nodeExporter:
     enabled: false

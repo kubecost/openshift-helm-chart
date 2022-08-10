@@ -56,6 +56,7 @@ Kubecost will be collecting data, please wait 5-15 minutes before the UI to refl
 
 - You have created a Grafana Cloud account & You have permissions to create Grafana Cloud API keys
 - Add required service account for grafana-agent to `hostmount-anyuid` SCC:
+
 `oc adm policy add-scc-to-user hostmount-anyuid system:serviceaccount:kubecost:grafana-agent`
 
 #### Installation:
@@ -379,7 +380,7 @@ data:
 EOF
 (export NAMESPACE=kubecost && kubectl apply -n $NAMESPACE -f -)
 
-MANIFEST_URL=https://raw.githubusercontent.com/linhlam-kc/agent/main/production/kubernetes/agent-bare.yaml NAMESPACE=kubecost-grafana /bin/sh -c "$(curl -fsSL https://raw.githubusercontent.com/grafana/agent/v0.24.2/production/kubernetes/install-bare.sh)" | kubectl apply -f -
+MANIFEST_URL=https://raw.githubusercontent.com/kubecost/openshift-helm-chart/main/grafana-agent-config/agent-bare.yaml NAMESPACE=kubecost /bin/sh -c "$(curl -fsSL https://raw.githubusercontent.com/grafana/agent/v0.24.2/production/kubernetes/install-bare.sh)" | kubectl apply -f -
 ```
 </details>
 
@@ -399,7 +400,7 @@ export USERNAME=<REPLACE-WITH-GRAFANA-PROM-REMOTE-WRITE-USERNAME>
 printf "${PASSWORD}" > PASSWORD
 printf "${USERNAME}" > USERNAME
 ```
-- Verify that you can run query against your Grafana Cloud Prometheus query endpoint (Optional):
+- Verify that you can run query against your Grafana Cloud Prometheus query endpoint with your API key (Optional):
 
 ```Bash
 cred="$( echo $NAME:$PASSWORD | base64 )"; curl -H "Authorization: Basic $cred" https://<REPLACE-WITH-GRAFANA-PROM-QUERY-ENDPOINT>/api/v1/query?query=up
