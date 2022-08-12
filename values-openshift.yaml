@@ -20,8 +20,7 @@ global:
   grafana:
     enabled: false
     proxy: false
-kubecostFrontend:
-  fullImageName: "linhlamkc/cost-analyzer-frontend:prod-1.95.00"
+
 openshiftDeployment: true
 
 # Define persistence volume for cost-analyzer
