@@ -21,6 +21,8 @@ global:
     enabled: false
     proxy: false
 
+kubecostFrontend:
+  fullImageName: "gcr.io/guestbook-227502/frontend-unpriv:1.96.0"
 openshiftDeployment: true
 
 # Define persistence volume for cost-analyzer
