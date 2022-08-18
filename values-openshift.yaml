@@ -1,6 +1,6 @@
 kubecostProductConfigs:
   clusterName: CLUSTER_NAME
-  projectID: CLUSTER_NAME
+  # projectID: CLUSTER_NAME
 
 prometheus:
   nodeExporter:
@@ -22,7 +22,7 @@ global:
     proxy: false
 
 kubecostFrontend:
-  fullImageName: "gcr.io/guestbook-227502/frontend-unpriv:1.96.0"
+  fullImageName: "linhlamkc/cost-analyzer-frontend:prod-1.96.0"
 openshiftDeployment: true
 
 # Define persistence volume for cost-analyzer
