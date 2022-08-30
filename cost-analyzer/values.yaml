@@ -200,7 +200,7 @@ systemProxy:
 # - name: "image-pull-secret"
 
 kubecostFrontend:
-  fullImageName: "linhlamkc/cost-analyzer-frontend:prod-1.95.00"
+  image: "gcr.io/kubecost1/frontend"
   imagePullPolicy: Always
   # extraEnv:
   # - name: NGINX_ENTRYPOINT_WORKER_PROCESSES_AUTOTUNE
@@ -624,6 +624,8 @@ networkCosts:
 # Used for HA mode in Business & Enterprise tier
 kubecostDeployment:
   replicas: 1
+  leaderFollower:
+    enabled: false
 
 # Kubecost Cluster Controller for Right Sizing and Cluster Turndown
 clusterController:
