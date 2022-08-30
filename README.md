@@ -41,7 +41,7 @@ Update CLUSTER_NAME and other configuration in [values-openshift.yaml](values-op
 Then install against the local cost-analyzer repo using following helm install command:
 
 ```bash
-helm upgrade --install kubecost ./cost-analyzer --namespace kubecost --create-namespace -f ./values-openshift.yaml
+helm upgrade --install kubecost --repo https://raw.githubusercontent.com/kubecost/openshift-helm-chart/main cost-analyzer --namespace kubecost --create-namespace -f https://raw.githubusercontent.com/kubecost/openshift-helm-chart/main/values-openshift.yaml
 ```
 
 Wait for all pods to be ready.
@@ -62,7 +62,7 @@ Kubecost will be collecting data, please wait 5-15 minutes before the UI to refl
 #### Installation:
 
 **1. Clone this repository to your dev environment.**
-   
+
 **2. Install the Grafana Agent on your cluster.**
 
 On the existing K8s cluster that you intend to install Kubecost, run the following commands to install grafana agent to scrape the metrics from Kubecost /metrics end point. The script below installs Grafana agent with necessary scraping configuration for Kubecost, you may want to add additional scrape configuration for your set up. Please remember to replace these following values by your actual Grafana cloud's values:
@@ -376,7 +376,7 @@ data:
               ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
               insecure_skip_verify: false
               server_name: kubernetes
-  
+
 EOF
 (export NAMESPACE=kubecost && kubectl apply -n $NAMESPACE -f -)
 
@@ -393,7 +393,7 @@ To learn more about how to install and config Grafana agent as well as additiona
 **4. Create dbsecret to allow Kubecots to query the metrics from Grafana Cloud Prometheus:**
 
 - Create two files in your working directory, called `USERNAME` and `PASSWORD` respectively
-  
+
 ```Bash
 export PASSWORD=<REPLACE-WITH-GRAFANA-PROM-REMOTE-WRITE-API-KEY>
 export USERNAME=<REPLACE-WITH-GRAFANA-PROM-REMOTE-WRITE-USERNAME>
