@@ -21,13 +21,11 @@ global:
     enabled: false
     proxy: false
 
-kubecostFrontend:
-  fullImageName: "linhlamkc/cost-analyzer-frontend:prod-1.96.0"
 openshiftDeployment: true
 
 # Define persistence volume for cost-analyzer
 persistentVolume:
-  size: 0.2Gi
+  size: 32.0Gi
   dbSize: 32.0Gi
   enabled: true # Note that setting this to false means configurations will be wiped out on pod restart.
   # storageClass: "-" #
