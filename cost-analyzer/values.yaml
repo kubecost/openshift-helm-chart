@@ -97,6 +97,7 @@ global:
       enabled: false # If true, allow kubecost to write to your alertmanager
       fqdn: http://cost-analyzer-prometheus-server.default.svc #example fqdn. Ignored if prometheus.enabled: true
 
+
    # Set saved report(s) accessible from reports.html
    # Ref: http://docs.kubecost.com/saved-reports
   savedReports:

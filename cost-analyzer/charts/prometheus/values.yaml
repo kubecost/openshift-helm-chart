@@ -1019,8 +1019,8 @@ pushgateway:
   ## Security context to be added to push-gateway pods
   ##
   securityContext: {}
-    # runAsUser: 1001
-    # runAsNonRoot: true
+#     runAsUser: 1001
+#     runAsNonRoot: true
 
   service:
     annotations:
