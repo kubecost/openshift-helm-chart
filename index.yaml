@@ -8,6 +8,6 @@ entries:
       sources:
         - https://kubecost.github.io/openshift-helm-chart
       urls:
-        - git@github.com:kubecost/openshift-helm-chart.git
+        - https://github.com/kubecost/openshift-helm-chart/raw/main/cost-analyzer-ocp-1.97.0.tgz
       version: 1.97.0
 generated: 2022-07-29T16:23:20.499029981-06:00
