@@ -56,8 +56,8 @@ store:
   # Add extra selector matchLabels to store deployment
   deploymentMatchLabels: {}
   # Override the default deployment strategy
-  deploymentStrategy:
-    type: Recreate
+  # deploymentStrategy:
+  #   type: RollingUpdate
 
   # Enable metrics collecting for store service
   metrics:
@@ -122,10 +122,10 @@ store:
       #    hosts:
       #      - chart-example.local
   # Optional securityContext
-  securityContext: {}
-    # fsGroup: 1001
-    # runAsNonRoot: true
-    # runAsUser: 1001
+  securityContext:
+    fsGroup: 1001
+    runAsNonRoot: true
+    runAsUser: 1001
 
   resources: {}
   #  limits:
@@ -279,8 +279,8 @@ queryFrontend:
   # Add extra selector matchLabels to query deployment
   deploymentMatchLabels: {}
   # Override the default deployment strategy
-  deploymentStrategy:
-    type: Recreate
+  # deploymentStrategy:
+  #   type: RollingUpdate
 
   # Enable metrics collecting for query service
   metrics:
@@ -294,10 +294,10 @@ queryFrontend:
       labels: {}
 
   # Optional securityContext
-  securityContext: {}
-    # fsGroup: 1001
-    # runAsNonRoot: true
-    # runAsUser: 1001
+  securityContext:
+    fsGroup: 1001
+    runAsNonRoot: true
+    runAsUser: 1001
 
   resources: {}
   #  limits:
@@ -445,8 +445,8 @@ query:
   # Add extra selector matchLabels to query deployment
   deploymentMatchLabels: {}
   # Override the default deployment strategy
-  deploymentStrategy:
-    type: Recreate
+  # deploymentStrategy:
+  #   type: RollingUpdate
 
   # Enable metrics collecting for query service
   metrics:
@@ -460,10 +460,10 @@ query:
       labels: {}
 
   # Optional securityContext
-  securityContext: {}
-    # fsGroup: 1001
-    # runAsNonRoot: true
-    # runAsUser: 1001
+  securityContext:
+    fsGroup: 1001
+    runAsNonRoot: true
+    runAsUser: 1001
 
   resources: {}
   #  limits:
@@ -574,8 +574,8 @@ compact:
   # Add extra selector matchLabels to compact deployment
   deploymentMatchLabels: {}
   # Override the default deployment strategy
-  deploymentStrategy:
-    type: Recreate
+  # deploymentStrategy:
+  #   type: RollingUpdate
 
   # Enable metrics collecting for compact service
   metrics:
@@ -590,10 +590,10 @@ compact:
   serviceAccount: ""
 
   # Optional securityContext
-  securityContext: {}
-    # fsGroup: 1001
-    # runAsNonRoot: true
-    # runAsUser: 1001
+  securityContext:
+    fsGroup: 1001
+    runAsNonRoot: true
+    runAsUser: 1001
 
   resources: {}
   #  limits:
@@ -685,8 +685,8 @@ bucket:
   # Add extra selector matchLabels to bucket deployment
   deploymentMatchLabels: {}
   # Override the default deployment strategy
-  deploymentStrategy:
-    type: Recreate
+  # deploymentStrategy:
+  #   type: RollingUpdate
 
   # Enable podDisruptionBudget for bucket component
   podDisruptionBudget:
@@ -696,10 +696,10 @@ bucket:
     #  maxUnavailable: 50%
 
   # Optional securityContext
-  securityContext: {}
-    # fsGroup: 1001
-    # runAsNonRoot: true
-    # runAsUser: 1001
+  securityContext:
+    fsGroup: 1001
+    runAsNonRoot: true
+    runAsUser: 1001
 
   resources: {}
   #  limits:
