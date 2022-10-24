@@ -19,7 +19,7 @@ global:
     enabled: false
     proxy: false
 kubecostFrontend:
-  fullImageName: "linhlamkc/cost-analyzer-frontend:prod-1.95.00"
+  fullImageName: "gcr.io/guestbook-227502/openshift-frontend:1.95.1"
 openshiftDeployment: true
 
 # Define persistence volume for cost-analyzer
