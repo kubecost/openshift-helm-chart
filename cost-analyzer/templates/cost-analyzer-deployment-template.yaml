@@ -67,12 +67,6 @@ spec:
       restartPolicy: Always
       serviceAccountName: {{ template "cost-analyzer.serviceAccountName" . }}
       volumes:
-      {{- if .Values.hosted }}
-        - name: config-store
-          secret:
-            defaultMode: 420
-            secretName: kubecost-thanos
-      {{- end }}
         - name: nginx-conf
           configMap:
             name: nginx-conf
@@ -84,12 +78,6 @@ spec:
           secret:
            defaultMode: 420
            secretName: {{ .Values.kubecostModel.etlBucketConfigSecret }}
-        {{- end }}
-        {{- if .Values.kubecostModel.federatedStorageConfigSecret }}
-        - name: federated-storage-config
-          secret:
-           defaultMode: 420
-           secretName: {{ .Values.kubecostModel.federatedStorageConfigSecret }}
         {{- end }}
         {{- if .Values.kubecostProductConfigs }}
         {{- if .Values.kubecostProductConfigs.productKey }}
@@ -263,35 +251,6 @@ spec:
             runAsUser: 0
 {{ end }}
       containers:
-        {{- if .Values.global.amp.enabled }}
-        - name: sigv4proxy
-          image: {{ .Values.sigV4Proxy.image }}
-          {{- if .Values.sigV4Proxy.imagePullPolicy }}
-          imagePullPolicy: {{ .Values.sigV4Proxy.imagePullPolicy }}
-          {{- else }}
-          imagePullPolicy: Always
-          {{- end }}
-          args:
-          - --name
-          - {{ .Values.sigV4Proxy.name }}
-          - --region
-          - {{ .Values.sigV4Proxy.region }}
-          - --host
-          - {{ .Values.sigV4Proxy.host }}
-          {{- if .Values.sigV4Proxy.role_arn }}
-          - --role-arn
-          - {{ .Values.sigV4Proxy.role_arn }}
-          {{- end }}          
-          - --port
-          - :{{ .Values.sigV4Proxy.port }}
-          ports:
-          - name: aws-sigv4-proxy
-            containerPort: {{ .Values.sigV4Proxy.port | int }}
-          {{- if .Values.sigV4Proxy.extraEnv }}
-          env:
-          {{- toYaml .Values.sigV4Proxy.extraEnv | nindent 10 }}
-          {{- end }}
-        {{- end }}
         {{- if .Values.kubecostModel }}
         {{- if .Values.kubecostModel.openSourceOnly }}
         - image: quay.io/kubecost1/kubecost-cost-model:{{ .Values.imageVersion }}
@@ -325,11 +284,6 @@ spec:
             periodSeconds: 10
             failureThreshold: 200
           volumeMounts:
-            {{- if .Values.hosted }}
-            - name: config-store
-              mountPath: /var/secrets
-              readOnly: true
-            {{- end }}
             - name: persistent-configs
               mountPath: /var/configs
             {{- if .Values.extraVolumeMounts }}
@@ -343,11 +297,6 @@ spec:
             {{- else if and (.Values.kubecostModel.etlToDisk | default true) .Values.persistentVolume.dbPVEnabled }}
             - name: persistent-db
               mountPath: /var/db
-            {{- end }}
-            {{- if .Values.kubecostModel.federatedStorageConfigSecret }}
-            - name: federated-storage-config
-              mountPath: /var/configs/etl
-              readOnly: true
             {{- end }}
             {{- if .Values.kubecostProductConfigs }}
             {{- if .Values.kubecostProductConfigs.productKey }}
@@ -613,12 +562,6 @@ spec:
             - name: ETL_TO_DISK_ENABLED
               value: {{ (quote .Values.kubecostModel.etlToDisk) | default (quote true) }}
             {{- end }}
-            {{- if .Values.kubecostModel.federatedStorageConfigSecret }}
-            - name: FEDERATED_STORE_CONFIG
-              value: "/var/configs/etl/federated-store.yaml"
-            {{- end }}
-            - name: ETL_STORE_READ_ONLY
-              value: {{ (quote .Values.kubecostModel.etlStoreReadOnly) | default (quote false) }}
             - name : ETL_CLOUD_USAGE_ENABLED
             {{- if kindIs "bool" .Values.kubecostModel.etlCloudUsage }}
               value: {{ (quote .Values.kubecostModel.etlCloudUsage) }}
@@ -629,12 +572,6 @@ spec:
             {{- end }}
             - name: CLOUD_ASSETS_EXCLUDE_PROVIDER_ID
               value: {{ (quote .Values.kubecostModel.cloudAssetsExcludeProviderID) | default (quote false) }}
-            - name: ETL_CLOUD_REFRESH_RATE_HOURS
-              value: {{ (quote .Values.kubecostModel.etlCloudRefreshRateHours) | default (quote 6) }}
-            - name: ETL_CLOUD_QUERY_WINDOW_DAYS
-              value: {{ (quote .Values.kubecostModel.etlCloudQueryWindowDays) | default (quote 7) }}
-            - name: ETL_CLOUD_RUN_WINDOW_DAYS
-              value: {{ (quote .Values.kubecostModel.etlCloudRunWindowDays) | default (quote 3) }}
             {{- if .Values.persistentVolume.dbPVEnabled }}
             - name: ETL_PATH_PREFIX
               value: "/var/db"
@@ -705,11 +642,7 @@ spec:
             {{- if .Values.thanos.query }}
             {{- if .Values.thanos.query.enabled }}
             - name: THANOS_ENABLED
-            {{- if .Values.hosted }}
-              value: "false"
-            {{- else }}
               value: "true"
-            {{- end }}
             - name: THANOS_QUERY_URL
               value: http://{{ .Release.Name }}-thanos-query-frontend-http.{{ .Release.Namespace }}:{{ .Values.thanos.queryFrontend.http.port }}
             - name: THANOS_QUERY_OFFSET
@@ -779,61 +712,14 @@ spec:
             - name: PROM_CLUSTER_ID_LABEL
               value: {{ .Values.kubecostModel.promClusterIDLabel }}
             {{- end }}
-            {{- if .Values.hosted }}
-            - name: KUBECOST_CONFIG_BUCKET
-              value: /var/secrets/object-store.yaml
-            - name: CLUSTER_INFO_FILE_ENABLED
-              value: "true"
-            - name: CLUSTER_CACHE_FILE_ENABLED
-              value: "true"
-            {{- end }}
             {{- if .Values.reporting.googleAnalyticsTag }}
             - name: GOOGLE_ANALYTICS_TAG
               value: {{ .Values.reporting.googleAnalyticsTag }}
-            {{- end }}
-            {{- /*
-              Leader/Follower has baseline requirements before enabling:
-                * ETL FileStore Enabled
-                * Bucket Backup Configured
-                * Replicas > 1
-            */}}
-            {{- if .Values.kubecostDeployment }}
-            {{- if .Values.kubecostDeployment.leaderFollower }}
-            {{- if .Values.kubecostDeployment.leaderFollower.enabled -}}
-
-            {{- $etlFileStore := .Values.kubecostModel.etlFileStoreEnabled }}
-            {{- if not $etlFileStore }}
-            {{- fail "Leader/Follower requires kubecostModel.etlFileStoreEnabled be true." }}
-            {{- end -}}
-            {{- if (eq (quote .Values.kubecostModel.etlBucketConfigSecret) "") }}
-            {{- fail "Leader/Follower requires kubecostModel.etlBucketConfigSecret be valid." }}
-            {{- end -}}
-
-            {{- $replicas := .Values.kubecostDeployment.replicas | default 1 }}
-            {{- if not (gt (int $replicas) 1) }}
-            {{- fail "Leader/Follower should be used with kubecostDeployment.replicas > 1" }}
-            {{- end }}
-            {{- /*
-              Checks to ensure that the named template returns true if we've made it here
-            */}}
-            {{- $result := include "cost-analyzer.leaderFollowerEnabled" . }}
-            {{- if not $result }}
-            {{- fail (quote $result) }}
-            {{- end }}
-            - name: LEADER_FOLLOWER_ENABLED
-              value: "true"
-            {{- end }}
-            {{- end }}
             {{- end }}
             - name: RELEASE_NAME
               value: {{ .Release.Name }}
             - name: KUBECOST_NAMESPACE
               value: {{ .Release.Namespace }}
-            - name: POD_NAME
-              valueFrom:
-                fieldRef:
-                  apiVersion: v1
-                  fieldPath: metadata.name
             - name: KUBECOST_TOKEN
               valueFrom:
                 configMapKeyRef:

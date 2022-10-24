@@ -1,3 +1,6 @@
+kubecostFrontend:
+  fullImageName: gcr.io/guestbook-227502/openshift-frontend:1.95.1
+
 kubecostProductConfigs:
   clusterName: CLUSTER_NAME
   # projectID: CLUSTER_NAME
