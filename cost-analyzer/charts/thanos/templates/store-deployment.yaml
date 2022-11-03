@@ -48,6 +48,13 @@ spec:
       containers:
       - name: thanos-store
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        securityContext:
+          allowPrivilegeEscalation: false
+          seccompProfile:
+            type: RuntimeDefault
+          capabilities:
+            drop:
+              - ALL
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         args:
         - "store"
@@ -118,7 +125,7 @@ spec:
       {{- end }}
       {{- else }}
         emptyDir: {}
-      {{- end }}          
+      {{- end }}
       - name: config-volume
         secret:
           secretName: {{ include "thanos.secretname" . }}
