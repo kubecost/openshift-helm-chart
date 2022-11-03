@@ -44,7 +44,7 @@ Then install against the local cost-analyzer repo using following helm install c
 helm upgrade --install kubecost \
  --repo https://raw.githubusercontent.com/kubecost/openshift-helm-chart/1.98.0-rc.4/ cost-analyzer \
  --namespace kubecost --create-namespace \
- -f https://raw.githubusercontent.com/kubecost/openshift-helm-chart/1.98.0-rc.4/cost-analyzer/values-thanos.yaml
+ -f https://raw.githubusercontent.com/kubecost/openshift-helm-chart/1.98.0-rc.4/cost-analyzer/values-thanos.yaml \
  -f https://raw.githubusercontent.com/kubecost/openshift-helm-chart/1.98.0-rc.4/cost-analyzer/disable-psps.yaml
 ```
 
