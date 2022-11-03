@@ -16,8 +16,9 @@ The standard deployment is illustrated in the following diagram:
 
 ![Standard deployment](images/standard-lightbg.png)
 
-
 ### Multi Cluster Deployment:
+
+*Multi Cluster is an Enterprise Feature*
 
 Kubecost uses a hub and spoke model to aggregate multiple cluster metrics into a single-pane-of-glass.
 
@@ -28,6 +29,8 @@ In this model a single cluster will act as the primary which presents a UI and A
 ![Enterprise Deployment](images/thanos-architecture.png)
 
 ### Grafana managed Prometheus deployment:
+
+*Multi Cluster is an Enterprise Feature*
 
 In this solution, Kubecost is installed with the core components only (cost model, frontend) without user-defined Prometheus and other components. Grafana agent is installed as part of the solution to scrape the metrics from OCP monitoring stack managed components and Kubecost `/metrics` endpoint to write the data back to the Grafana Cloud managed Prometheus (Grafana Prometheus) instance. Kubecost reads the metrics directly from Grafana managed Prometheus.
 
