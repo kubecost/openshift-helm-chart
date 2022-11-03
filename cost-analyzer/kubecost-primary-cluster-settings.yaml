@@ -1,0 +1,16 @@
+kubecostModel:
+  etlCloudAsset: false # set to true to enable kubecost to include out-of-cluster cloud resources  (uses more memory)
+prometheus:
+  kubeStateMetrics:
+    enabled: false
+  kube-state-metrics:
+    disabled: true
+
+# if enabling network costs, also set the given cloud provider to true
+networkCosts:
+  enabled: false
+  config:
+    services:
+      amazon-web-services: false
+      google-cloud-services: false
+      azure-cloud-services: false
