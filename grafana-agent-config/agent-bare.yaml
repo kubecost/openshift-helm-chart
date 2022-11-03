@@ -29,12 +29,12 @@ rules:
   - get
 - apiGroups:
   - security.openshift.io
-  resources:      
+  resources:
   - securitycontextconstraints
-  verbs:          
+  verbs:
   - use
-  resourceNames:  
-  - hostmount-anyuid
+  resourceNames:
+  - hostmount-65532
 - apiGroups:
   - networking.k8s.io
   resources:
@@ -108,8 +108,7 @@ spec:
               fieldPath: spec.nodeName
         image: grafana/agent:v0.26.0
         imagePullPolicy: IfNotPresent
-        securityContext:
-          runAsUser: 0
+        securityContext: {}
         name: grafana-agent
         ports:
         - containerPort: 80

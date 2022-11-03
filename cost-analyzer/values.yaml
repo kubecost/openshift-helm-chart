@@ -472,6 +472,8 @@ prometheus:
         - source_labels: [__meta_kubernetes_pod_label_app]
           action: keep
           regex:  {{ template "cost-analyzer.networkCostsName" . }}
+  serviceAccount:
+    annotations: {}
   server:
     # If clusterIDConfigmap is defined, instead use user-generated configmap with key CLUSTER_ID
     # to use as unique cluster ID in kubecost cost-analyzer deployment.
@@ -733,11 +735,7 @@ grafana:
   rbac:
     # Manage the Grafana Pod Security Policy
     pspEnabled: true
-  securityContext:
-    runAsUser: 1001020000
-    runAsNonRoot: true
-    runAsGroup: 1001020000
-    fsGroup: 1001020000
+  securityContext: {}
   datasources:
     datasources.yaml:
       apiVersion: 1

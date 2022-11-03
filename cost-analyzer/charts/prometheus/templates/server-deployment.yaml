@@ -187,11 +187,7 @@ spec:
 {{ toYaml .Values.server.affinity | indent 8 }}
     {{- end }}
       terminationGracePeriodSeconds: {{ .Values.server.terminationGracePeriodSeconds }}
-      securityContext:
-        runAsUser: 1001020000
-        runAsNonRoot: true
-        runAsGroup: 1001020000
-        fsGroup: 1001020000
+      securityContext: {}
       volumes:
         {{- if .Values.selfsignedCertConfigMapName }}
         - name: {{ .Values.selfsignedCertConfigMapName }}

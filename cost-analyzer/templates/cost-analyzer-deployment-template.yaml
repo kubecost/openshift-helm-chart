@@ -50,11 +50,7 @@ spec:
 {{- end }}
 {{- end }}
     spec:
-      securityContext:
-        runAsUser: 1001020000
-        runAsNonRoot: true
-        runAsGroup: 1001020000
-        fsGroup: 1001020000
+      securityContext: {}
       restartPolicy: Always
       serviceAccountName: {{ template "cost-analyzer.serviceAccountName" . }}
       volumes:
@@ -257,11 +253,7 @@ spec:
             - name: persistent-db
               mountPath: /var/db
             {{- end }}
-          securityContext:
-            runAsUser: 1001020000
-            runAsNonRoot: true
-            runAsGroup: 1001020000
-            fsGroup: 1001020000
+          securityContext: {}
 {{ end }}
       containers:
         {{- if .Values.global.amp.enabled }}

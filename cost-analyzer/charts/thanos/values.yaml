@@ -122,11 +122,7 @@ store:
       #    hosts:
       #      - chart-example.local
   # Optional securityContext
-  securityContext:
-    runAsUser: 1001020000
-    runAsNonRoot: true
-    runAsGroup: 1001020000
-    fsGroup: 1001020000
+  securityContext: {}
 
   resources: {}
   #  limits:
@@ -295,11 +291,7 @@ queryFrontend:
       labels: {}
 
   # Optional securityContext
-  securityContext:
-    runAsUser: 1001020000
-    runAsNonRoot: true
-    runAsGroup: 1001020000
-    fsGroup: 1001020000
+  securityContext: {}
 
   resources: {}
   #  limits:
@@ -462,11 +454,7 @@ query:
       labels: {}
 
   # Optional securityContext
-  securityContext:
-    runAsUser: 1001020000
-    runAsNonRoot: true
-    runAsGroup: 1001020000
-    fsGroup: 1001020000
+  securityContext: {}
 
   resources: {}
   #  limits:
@@ -593,11 +581,7 @@ compact:
   serviceAccount: ""
 
   # Optional securityContext
-  securityContext:
-    runAsUser: 1001020000
-    runAsNonRoot: true
-    runAsGroup: 1001020000
-    fsGroup: 1001020000
+  securityContext: {}
 
   resources: {}
   #  limits:
@@ -700,11 +684,7 @@ bucket:
     #  maxUnavailable: 50%
 
   # Optional securityContext
-  securityContext:
-    runAsUser: 1001020000
-    runAsNonRoot: true
-    runAsGroup: 1001020000
-    fsGroup: 1001020000
+  securityContext: {}
 
   resources: {}
   #  limits:

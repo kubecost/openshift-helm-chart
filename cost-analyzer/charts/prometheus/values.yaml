@@ -276,11 +276,7 @@ alertmanager:
 
   ## Security context to be added to alertmanager pods
   ##
-  securityContext:
-    runAsUser: 65534
-    runAsNonRoot: true
-    runAsGroup: 65534
-    fsGroup: 65534
+  securityContext: {}
 
   service:
     annotations: {}
@@ -858,11 +854,7 @@ server:
 
   ## Security context to be added to server pods
   ##
-  securityContext:
-    runAsUser: 65534
-    runAsNonRoot: true
-    runAsGroup: 65534
-    fsGroup: 65534
+  securityContext: {}
 
   service:
     annotations: {}
@@ -1018,11 +1010,7 @@ pushgateway:
 
   ## Security context to be added to push-gateway pods
   ##
-  securityContext:
-    runAsUser: 65534
-    runAsNonRoot: true
-    runAsGroup: 65534
-    fsGroup: 65534
+  securityContext: {}
 
   service:
     annotations:

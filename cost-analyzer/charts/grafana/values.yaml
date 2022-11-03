@@ -35,9 +35,7 @@ image:
   # pullSecrets:
   #   - myRegistrKeySecretName
 
-securityContext:
-  runAsUser: 472
-  fsGroup: 472
+securityContext: {}
 
 downloadDashboardsImage:
   repository: curlimages/curl

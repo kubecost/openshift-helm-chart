@@ -39,9 +39,7 @@ prometheus:
       storage.tsdb.min-block-duration: 2h
       storage.tsdb.max-block-duration: 2h
       storage.tsdb.retention: 10h
-    securityContext:
-      runAsNonRoot: true
-      runAsUser: 1001
+    securityContext: {}
     extraSecretMounts:
       - name: object-store-volume
         mountPath: /etc/thanos/config
@@ -51,9 +49,7 @@ prometheus:
     sidecarContainers:
     - name: thanos-sidecar
       image: thanosio/thanos:v0.22.0
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1001
+      securityContext: {}
       args:
       - sidecar
       - --log.level=debug

@@ -28,7 +28,7 @@ kind: ServiceAccount
 metadata:
   name: kubecost-cost-analyzer
   labels:
-    
+
     app.kubernetes.io/name: cost-analyzer
     helm.sh/chart: cost-analyzer-1.98.0-rc.4
     app.kubernetes.io/instance: kubecost
@@ -347,7 +347,7 @@ data:
         - source_labels: [__meta_kubernetes_pod_label_app]
           action: keep
           regex:  kubecost-network-costs
-    
+
   recording_rules.yml: |
     {}
   rules: |
@@ -395,7 +395,7 @@ kind: ConfigMap
 metadata:
   name: kubecost-cost-analyzer
   labels:
-    
+
     app.kubernetes.io/name: cost-analyzer
     helm.sh/chart: cost-analyzer-1.98.0-rc.4
     app.kubernetes.io/instance: kubecost
@@ -412,7 +412,7 @@ kind: ConfigMap
 metadata:
   name: nginx-conf
   labels:
-    
+
     app.kubernetes.io/name: cost-analyzer
     helm.sh/chart: cost-analyzer-1.98.0-rc.4
     app.kubernetes.io/instance: kubecost
@@ -564,7 +564,7 @@ data:
             proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
             proxy_set_header Host $http_host;
         }
-    
+
     }
 ---
 # Source: cost-analyzer/templates/grafana-attached-disk-metrics-template.yaml
@@ -573,7 +573,7 @@ kind: ConfigMap
 metadata:
   name: attached-disk-metrics-dashboard
   labels:
-    
+
     app.kubernetes.io/name: cost-analyzer
     helm.sh/chart: cost-analyzer-1.98.0-rc.4
     app.kubernetes.io/instance: kubecost
@@ -1035,7 +1035,7 @@ kind: ConfigMap
 metadata:
   name: cluster-metrics-dashboard
   labels:
-    
+
     app.kubernetes.io/name: cost-analyzer
     helm.sh/chart: cost-analyzer-1.98.0-rc.4
     app.kubernetes.io/instance: kubecost
@@ -2735,7 +2735,7 @@ kind: ConfigMap
 metadata:
   name: cluster-utilization-dashboard
   labels:
-    
+
     app.kubernetes.io/name: cost-analyzer
     helm.sh/chart: cost-analyzer-1.98.0-rc.4
     app.kubernetes.io/instance: kubecost
@@ -5949,7 +5949,7 @@ kind: ConfigMap
 metadata:
   name: deployment-utilization-dashboard
   labels:
-    
+
     app.kubernetes.io/name: cost-analyzer
     helm.sh/chart: cost-analyzer-1.98.0-rc.4
     app.kubernetes.io/instance: kubecost
@@ -7353,7 +7353,7 @@ kind: ConfigMap
 metadata:
   name: label-cost-dashboard
   labels:
-    
+
     app.kubernetes.io/name: cost-analyzer
     helm.sh/chart: cost-analyzer-1.98.0-rc.4
     app.kubernetes.io/instance: kubecost
@@ -8516,7 +8516,7 @@ kind: ConfigMap
 metadata:
   name: namespace-utilization-dashboard
   labels:
-    
+
     app.kubernetes.io/name: cost-analyzer
     helm.sh/chart: cost-analyzer-1.98.0-rc.4
     app.kubernetes.io/instance: kubecost
@@ -8548,7 +8548,7 @@ data:
         	"id":9,
         	"iteration":1553150922105,
         	"links":[
-        
+
         	],
         	"panels":[
         		{
@@ -8569,7 +8569,7 @@ data:
         			"hideTimeOverride":true,
         			"id":73,
         			"links":[
-        
+
         			],
         			"pageSize":8,
         			"repeat":null,
@@ -8614,7 +8614,7 @@ data:
         					"decimals":2,
         					"pattern":"Value #B",
         					"thresholds":[
-        
+
         					],
         					"type":"number",
         					"unit":"decbytes"
@@ -8632,7 +8632,7 @@ data:
         					"mappingType":1,
         					"pattern":"Value #A",
         					"thresholds":[
-        
+
         					],
         					"type":"number",
         					"unit":"percent"
@@ -8650,7 +8650,7 @@ data:
         					"mappingType":1,
         					"pattern":"Time",
         					"thresholds":[
-        
+
         					],
         					"type":"hidden",
         					"unit":"short"
@@ -8668,7 +8668,7 @@ data:
         					"mappingType":1,
         					"pattern":"Value #C",
         					"thresholds":[
-        
+
         					],
         					"type":"number",
         					"unit":"currencyUSD"
@@ -8686,7 +8686,7 @@ data:
         					"mappingType":1,
         					"pattern":"Value #D",
         					"thresholds":[
-        
+
         					],
         					"type":"number",
         					"unit":"currencyUSD"
@@ -8776,7 +8776,7 @@ data:
         			"hideTimeOverride":true,
         			"id":90,
         			"links":[
-        
+
         			],
         			"pageSize":8,
         			"repeatDirection":"v",
@@ -8800,7 +8800,7 @@ data:
         					"mappingType":1,
         					"pattern":"namespace",
         					"thresholds":[
-        
+
         					],
         					"type":"hidden",
         					"unit":"short"
@@ -8818,7 +8818,7 @@ data:
         					"mappingType":1,
         					"pattern":"persistentvolumeclaim",
         					"thresholds":[
-        
+
         					],
         					"type":"number",
         					"unit":"short"
@@ -8836,7 +8836,7 @@ data:
         					"mappingType":1,
         					"pattern":"storageclass",
         					"thresholds":[
-        
+
         					],
         					"type":"number",
         					"unit":"short"
@@ -8854,7 +8854,7 @@ data:
         					"mappingType":1,
         					"pattern":"Value",
         					"thresholds":[
-        
+
         					],
         					"type":"number",
         					"unit":"gbytes"
@@ -8872,7 +8872,7 @@ data:
         					"mappingType":1,
         					"pattern":"Time",
         					"thresholds":[
-        
+
         					],
         					"type":"hidden",
         					"unit":"short"
@@ -8899,7 +8899,7 @@ data:
         		},
         		{
         			"aliasColors":{
-        
+
         			},
         			"bars":false,
         			"dashLength":10,
@@ -8926,7 +8926,7 @@ data:
         			"lines":true,
         			"linewidth":1,
         			"links":[
-        
+
         			],
         			"nullPointMode":"null",
         			"percentage":false,
@@ -8934,7 +8934,7 @@ data:
         			"points":false,
         			"renderer":"flot",
         			"seriesOverrides":[
-        
+
         			],
         			"spaceLength":10,
         			"stack":false,
@@ -8948,7 +8948,7 @@ data:
         				}
         			],
         			"thresholds":[
-        
+
         			],
         			"timeFrom":null,
         			"timeShift":null,
@@ -8965,7 +8965,7 @@ data:
         				"name":null,
         				"show":true,
         				"values":[
-        
+
         				]
         			},
         			"yaxes":[
@@ -8993,7 +8993,7 @@ data:
         		},
         		{
         			"aliasColors":{
-        
+
         			},
         			"bars":false,
         			"dashLength":10,
@@ -9005,7 +9005,7 @@ data:
         			"error":false,
         			"fill":0,
         			"grid":{
-        
+
         			},
         			"gridPos":{
         				"h":6,
@@ -9035,7 +9035,7 @@ data:
         			"lines":true,
         			"linewidth":2,
         			"links":[
-        
+
         			],
         			"nullPointMode":"connected",
         			"percentage":false,
@@ -9043,7 +9043,7 @@ data:
         			"points":false,
         			"renderer":"flot",
         			"seriesOverrides":[
-        
+
         			],
         			"spaceLength":10,
         			"stack":false,
@@ -9063,7 +9063,7 @@ data:
         				}
         			],
         			"thresholds":[
-        
+
         			],
         			"timeFrom":"",
         			"timeShift":null,
@@ -9081,7 +9081,7 @@ data:
         				"name":null,
         				"show":true,
         				"values":[
-        
+
         				]
         			},
         			"yaxes":[
@@ -9110,7 +9110,7 @@ data:
         		},
         		{
         			"aliasColors":{
-        
+
         			},
         			"bars":false,
         			"dashLength":10,
@@ -9122,7 +9122,7 @@ data:
         			"error":false,
         			"fill":0,
         			"grid":{
-        
+
         			},
         			"gridPos":{
         				"h":6,
@@ -9149,7 +9149,7 @@ data:
         			"lines":true,
         			"linewidth":2,
         			"links":[
-        
+
         			],
         			"nullPointMode":"connected",
         			"percentage":false,
@@ -9157,7 +9157,7 @@ data:
         			"points":false,
         			"renderer":"flot",
         			"seriesOverrides":[
-        
+
         			],
         			"spaceLength":10,
         			"stack":false,
@@ -9173,7 +9173,7 @@ data:
         				}
         			],
         			"thresholds":[
-        
+
         			],
         			"timeFrom":"",
         			"timeShift":null,
@@ -9191,7 +9191,7 @@ data:
         				"name":null,
         				"show":true,
         				"values":[
-        
+
         				]
         			},
         			"yaxes":[
@@ -9220,7 +9220,7 @@ data:
         		},
         		{
         			"aliasColors":{
-        
+
         			},
         			"bars":false,
         			"dashLength":10,
@@ -9232,7 +9232,7 @@ data:
         			"error":false,
         			"fill":1,
         			"grid":{
-        
+
         			},
         			"gridPos":{
         				"h":6,
@@ -9262,7 +9262,7 @@ data:
         			"lines":true,
         			"linewidth":2,
         			"links":[
-        
+
         			],
         			"nullPointMode":"connected",
         			"percentage":false,
@@ -9270,7 +9270,7 @@ data:
         			"points":false,
         			"renderer":"flot",
         			"seriesOverrides":[
-        
+
         			],
         			"spaceLength":10,
         			"stack":false,
@@ -9300,7 +9300,7 @@ data:
         				}
         			],
         			"thresholds":[
-        
+
         			],
         			"timeFrom":"",
         			"timeShift":null,
@@ -9318,7 +9318,7 @@ data:
         				"name":null,
         				"show":true,
         				"values":[
-        
+
         				]
         			},
         			"yaxes":[
@@ -9346,7 +9346,7 @@ data:
         		},
         		{
         			"aliasColors":{
-        
+
         			},
         			"bars":false,
         			"dashLength":10,
@@ -9358,7 +9358,7 @@ data:
         			"error":false,
         			"fill":1,
         			"grid":{
-        
+
         			},
         			"gridPos":{
         				"h":6,
@@ -9388,7 +9388,7 @@ data:
         			"lines":true,
         			"linewidth":2,
         			"links":[
-        
+
         			],
         			"nullPointMode":"connected",
         			"percentage":false,
@@ -9396,7 +9396,7 @@ data:
         			"points":false,
         			"renderer":"flot",
         			"seriesOverrides":[
-        
+
         			],
         			"spaceLength":10,
         			"stack":false,
@@ -9426,7 +9426,7 @@ data:
         				}
         			],
         			"thresholds":[
-        
+
         			],
         			"timeFrom":"",
         			"timeShift":null,
@@ -9444,7 +9444,7 @@ data:
         				"name":null,
         				"show":true,
         				"values":[
-        
+
         				]
         			},
         			"yaxes":[
@@ -9620,7 +9620,7 @@ data:
         				"multi":false,
         				"name":"namespace",
         				"options":[
-        
+
         				],
         				"query":"query_result(sum(kube_namespace_created{namespace!=\"\"}) by (namespace))",
         				"refresh":1,
@@ -9629,7 +9629,7 @@ data:
         				"sort":0,
         				"tagValuesQuery":"",
         				"tags":[
-        
+
         				],
         				"tagsQuery":"",
         				"type":"query",
@@ -9638,7 +9638,7 @@ data:
         			{
         				"datasource":"${datasource}",
         				"filters":[
-        
+
         				],
         				"hide":0,
         				"label":"",
@@ -9709,7 +9709,7 @@ kind: ConfigMap
 metadata:
   name: node-utilization-dashboard
   labels:
-    
+
     app.kubernetes.io/name: cost-analyzer
     helm.sh/chart: cost-analyzer-1.98.0-rc.4
     app.kubernetes.io/instance: kubecost
@@ -9740,7 +9740,7 @@ data:
         	"id":6,
         	"iteration":1557245882378,
         	"links":[
-        
+
         	],
         	"panels":[
         		{
@@ -9770,7 +9770,7 @@ data:
         			"id":2,
         			"interval":null,
         			"links":[
-        
+
         			],
         			"mappingType":1,
         			"mappingTypes":[
@@ -9852,7 +9852,7 @@ data:
         			"id":3,
         			"interval":null,
         			"links":[
-        
+
         			],
         			"mappingType":1,
         			"mappingTypes":[
@@ -9934,7 +9934,7 @@ data:
         			"id":4,
         			"interval":null,
         			"links":[
-        
+
         			],
         			"mappingType":1,
         			"mappingTypes":[
@@ -10007,7 +10007,7 @@ data:
         			"hideTimeOverride":true,
         			"id":21,
         			"links":[
-        
+
         			],
         			"pageSize":8,
         			"repeat":null,
@@ -10053,7 +10053,7 @@ data:
         					"mappingType":1,
         					"pattern":"Time",
         					"thresholds":[
-        
+
         					],
         					"type":"hidden",
         					"unit":"short"
@@ -10071,7 +10071,7 @@ data:
         					"mappingType":1,
         					"pattern":"Value #C",
         					"thresholds":[
-        
+
         					],
         					"type":"number",
         					"unit":"short"
@@ -10089,7 +10089,7 @@ data:
         					"mappingType":1,
         					"pattern":"Value #A",
         					"thresholds":[
-        
+
         					],
         					"type":"number",
         					"unit":"short"
@@ -10107,7 +10107,7 @@ data:
         					"mappingType":1,
         					"pattern":"Value #B",
         					"thresholds":[
-        
+
         					],
         					"type":"number",
         					"unit":"short"
@@ -10125,7 +10125,7 @@ data:
         					"mappingType":1,
         					"pattern":"Value #D",
         					"thresholds":[
-        
+
         					],
         					"type":"number",
         					"unit":"bytes"
@@ -10143,7 +10143,7 @@ data:
         					"mappingType":1,
         					"pattern":"Value #E",
         					"thresholds":[
-        
+
         					],
         					"type":"number",
         					"unit":"bytes"
@@ -10161,7 +10161,7 @@ data:
         					"mappingType":1,
         					"pattern":"Value #F",
         					"thresholds":[
-        
+
         					],
         					"type":"number",
         					"unit":"bytes"
@@ -10232,7 +10232,7 @@ data:
         			"id":8,
         			"interval":null,
         			"links":[
-        
+
         			],
         			"mappingType":1,
         			"mappingTypes":[
@@ -10315,7 +10315,7 @@ data:
         			"id":18,
         			"interval":null,
         			"links":[
-        
+
         			],
         			"mappingType":1,
         			"mappingTypes":[
@@ -10397,7 +10397,7 @@ data:
         			"id":9,
         			"interval":null,
         			"links":[
-        
+
         			],
         			"mappingType":1,
         			"mappingTypes":[
@@ -10479,7 +10479,7 @@ data:
         			"id":19,
         			"interval":null,
         			"links":[
-        
+
         			],
         			"mappingType":1,
         			"mappingTypes":[
@@ -10536,7 +10536,7 @@ data:
         		},
         		{
         			"aliasColors":{
-        
+
         			},
         			"bars":false,
         			"dashLength":10,
@@ -10548,7 +10548,7 @@ data:
         			"error":false,
         			"fill":0,
         			"grid":{
-        
+
         			},
         			"gridPos":{
         				"h":6,
@@ -10578,7 +10578,7 @@ data:
         			"lines":true,
         			"linewidth":2,
         			"links":[
-        
+
         			],
         			"nullPointMode":"connected",
         			"percentage":false,
@@ -10586,7 +10586,7 @@ data:
         			"points":false,
         			"renderer":"flot",
         			"seriesOverrides":[
-        
+
         			],
         			"spaceLength":10,
         			"stack":false,
@@ -10606,7 +10606,7 @@ data:
         				}
         			],
         			"thresholds":[
-        
+
         			],
         			"timeFrom":"",
         			"timeShift":null,
@@ -10624,7 +10624,7 @@ data:
         				"name":null,
         				"show":true,
         				"values":[
-        
+
         				]
         			},
         			"yaxes":[
@@ -10653,7 +10653,7 @@ data:
         		},
         		{
         			"aliasColors":{
-        
+
         			},
         			"bars":false,
         			"dashLength":10,
@@ -10665,7 +10665,7 @@ data:
         			"error":false,
         			"fill":0,
         			"grid":{
-        
+
         			},
         			"gridPos":{
         				"h":6,
@@ -10692,7 +10692,7 @@ data:
         			"lines":true,
         			"linewidth":2,
         			"links":[
-        
+
         			],
         			"nullPointMode":"connected",
         			"percentage":false,
@@ -10700,7 +10700,7 @@ data:
         			"points":false,
         			"renderer":"flot",
         			"seriesOverrides":[
-        
+
         			],
         			"spaceLength":10,
         			"stack":false,
@@ -10719,7 +10719,7 @@ data:
         				}
         			],
         			"thresholds":[
-        
+
         			],
         			"timeFrom":"",
         			"timeShift":null,
@@ -10737,7 +10737,7 @@ data:
         				"name":null,
         				"show":true,
         				"values":[
-        
+
         				]
         			},
         			"yaxes":[
@@ -10766,7 +10766,7 @@ data:
         		},
         		{
         			"aliasColors":{
-        
+
         			},
         			"bars":false,
         			"dashLength":10,
@@ -10778,7 +10778,7 @@ data:
         			"error":false,
         			"fill":1,
         			"grid":{
-        
+
         			},
         			"gridPos":{
         				"h":6,
@@ -10808,7 +10808,7 @@ data:
         			"lines":true,
         			"linewidth":2,
         			"links":[
-        
+
         			],
         			"nullPointMode":"connected",
         			"percentage":false,
@@ -10816,7 +10816,7 @@ data:
         			"points":false,
         			"renderer":"flot",
         			"seriesOverrides":[
-        
+
         			],
         			"spaceLength":10,
         			"stack":false,
@@ -10846,7 +10846,7 @@ data:
         				}
         			],
         			"thresholds":[
-        
+
         			],
         			"timeFrom":"",
         			"timeShift":null,
@@ -10864,7 +10864,7 @@ data:
         				"name":null,
         				"show":true,
         				"values":[
-        
+
         				]
         			},
         			"yaxes":[
@@ -10892,7 +10892,7 @@ data:
         		},
         		{
         			"aliasColors":{
-        
+
         			},
         			"bars":false,
         			"dashLength":10,
@@ -10904,7 +10904,7 @@ data:
         			"error":false,
         			"fill":1,
         			"grid":{
-        
+
         			},
         			"gridPos":{
         				"h":6,
@@ -10934,7 +10934,7 @@ data:
         			"lines":true,
         			"linewidth":2,
         			"links":[
-        
+
         			],
         			"nullPointMode":"connected",
         			"percentage":false,
@@ -10942,7 +10942,7 @@ data:
         			"points":false,
         			"renderer":"flot",
         			"seriesOverrides":[
-        
+
         			],
         			"spaceLength":10,
         			"stack":false,
@@ -10972,7 +10972,7 @@ data:
         				}
         			],
         			"thresholds":[
-        
+
         			],
         			"timeFrom":"",
         			"timeShift":null,
@@ -10990,7 +10990,7 @@ data:
         				"name":null,
         				"show":true,
         				"values":[
-        
+
         				]
         			},
         			"yaxes":[
@@ -11039,7 +11039,7 @@ data:
         				"multi":false,
         				"name":"node",
         				"options":[
-        
+
         				],
         				"query":"query_result(kube_node_labels)",
         				"refresh":1,
@@ -11048,7 +11048,7 @@ data:
         				"sort":0,
         				"tagValuesQuery":"",
         				"tags":[
-        
+
         				],
         				"tagsQuery":"",
         				"type":"query",
@@ -11116,7 +11116,7 @@ kind: ConfigMap
 metadata:
   name: pod-utilization-dashboard
   labels:
-    
+
     app.kubernetes.io/name: cost-analyzer
     helm.sh/chart: cost-analyzer-1.98.0-rc.4
     app.kubernetes.io/instance: kubecost
@@ -12084,7 +12084,7 @@ kind: ConfigMap
 metadata:
   name: prom-benchmark-dashboard
   labels:
-    
+
     app.kubernetes.io/name: cost-analyzer
     helm.sh/chart: cost-analyzer-1.98.0-rc.4
     app.kubernetes.io/instance: kubecost
@@ -17833,7 +17833,7 @@ apiVersion: v1
 metadata:
   name: kubecost-cost-analyzer
   labels:
-    
+
     app.kubernetes.io/name: cost-analyzer
     helm.sh/chart: cost-analyzer-1.98.0-rc.4
     app.kubernetes.io/instance: kubecost
@@ -17908,7 +17908,7 @@ kind: ClusterRole
 metadata:
   name: kubecost-cost-analyzer
   labels:
-    
+
     app.kubernetes.io/name: cost-analyzer
     helm.sh/chart: cost-analyzer-1.98.0-rc.4
     app.kubernetes.io/instance: kubecost
@@ -17980,9 +17980,9 @@ rules:
       - get
       - list
       - watch
-  - apiGroups: 
+  - apiGroups:
       - storage.k8s.io
-    resources: 
+    resources:
       - storageclasses
     verbs:
       - get
@@ -18042,7 +18042,7 @@ kind: ClusterRoleBinding
 metadata:
   name: kubecost-cost-analyzer
   labels:
-    
+
     app.kubernetes.io/name: cost-analyzer
     helm.sh/chart: cost-analyzer-1.98.0-rc.4
     app.kubernetes.io/instance: kubecost
@@ -18075,14 +18075,14 @@ metadata:
   namespace: kubecost
   name: kubecost-cost-analyzer
   labels:
-    
+
     app.kubernetes.io/name: cost-analyzer
     helm.sh/chart: cost-analyzer-1.98.0-rc.4
     app.kubernetes.io/instance: kubecost
     app.kubernetes.io/managed-by: Helm
     app: cost-analyzer
 rules:
-- apiGroups: 
+- apiGroups:
     - ''
   resources:
     - "pods/log"
@@ -18115,7 +18115,7 @@ kind: RoleBinding
 metadata:
   name: kubecost-cost-analyzer
   labels:
-    
+
     app.kubernetes.io/name: cost-analyzer
     helm.sh/chart: cost-analyzer-1.98.0-rc.4
     app.kubernetes.io/instance: kubecost
@@ -18380,7 +18380,7 @@ apiVersion: v1
 metadata:
   name: kubecost-cost-analyzer
   labels:
-    
+
     app.kubernetes.io/name: cost-analyzer
     helm.sh/chart: cost-analyzer-1.98.0-rc.4
     app.kubernetes.io/instance: kubecost
@@ -18388,7 +18388,7 @@ metadata:
     app: cost-analyzer
 spec:
   selector:
-    
+
     app.kubernetes.io/name: cost-analyzer
     app.kubernetes.io/instance: kubecost
     app: cost-analyzer
@@ -18426,11 +18426,7 @@ spec:
         release: kubecost
     spec:
       serviceAccountName: kubecost-grafana
-      securityContext:
-        fsGroup: 1001020000
-        runAsGroup: 1001020000
-        runAsNonRoot: true
-        runAsUser: 1001020000
+      securityContext: {}
       containers:
         - name: grafana-sc-dashboard
           securityContext:
@@ -18481,7 +18477,7 @@ spec:
               subPath: provider.yaml
             - name: storage
               mountPath: "/var/lib/grafana"
-              subPath: 
+              subPath:
           ports:
             - name: service
               containerPort: 80
@@ -18666,17 +18662,9 @@ spec:
             subPath: ""
           - mountPath: /etc/config
             name: object-store-volume
-      securityContext:
-        fsGroup: 1001020000
-        runAsGroup: 1001020000
-        runAsNonRoot: true
-        runAsUser: 1001020000
+      securityContext: {}
       terminationGracePeriodSeconds: 300
-      securityContext:
-        runAsUser: 1001020000
-        runAsNonRoot: true
-        runAsGroup: 1001020000
-        fsGroup: 1001020000
+      securityContext: {}
       volumes:
         - name: config-volume
           configMap:
@@ -18710,7 +18698,7 @@ spec:
       app.kubernetes.io/component: compact
 
 
-  strategy: 
+  strategy:
     type: Recreate
 
   template:
@@ -18756,7 +18744,7 @@ spec:
           readOnly: true
         - name: data-volume
           mountPath: /var/thanos/compact
-        resources: 
+        resources:
           {}
       volumes:
       - name: data-volume
@@ -18765,11 +18753,7 @@ spec:
       - name: config-volume
         secret:
           secretName: kubecost-thanos
-      securityContext: 
-        fsGroup: 1001020000
-        runAsGroup: 1001020000
-        runAsNonRoot: true
-        runAsUser: 1001020000
+      securityContext: {}
 ---
 # Source: cost-analyzer/charts/thanos/templates/query-deployment.yaml
 apiVersion: apps/v1
@@ -18793,7 +18777,7 @@ spec:
       app.kubernetes.io/component: query
 
 
-  strategy: 
+  strategy:
     type: Recreate
 
   template:
@@ -18832,7 +18816,7 @@ spec:
         - name: grpc
           containerPort: 10901
         resources:
-          
+
           requests:
             memory: 2.5Gi
         env:
@@ -18846,11 +18830,7 @@ spec:
             path: /-/healthy
             port: http
       volumes:
-      securityContext: 
-        fsGroup: 1001020000
-        runAsGroup: 1001020000
-        runAsNonRoot: true
-        runAsUser: 1001020000
+      securityContext: {}
 ---
 # Source: cost-analyzer/charts/thanos/templates/query-frontend-deployment.yaml
 apiVersion: apps/v1
@@ -18874,7 +18854,7 @@ spec:
       app.kubernetes.io/component: query-frontend
 
 
-  strategy: 
+  strategy:
     type: Recreate
 
   template:
@@ -18927,7 +18907,7 @@ spec:
         - name: http
           containerPort: 10902
         resources:
-          
+
           requests:
             memory: 1.5Gi
         env:
@@ -18941,11 +18921,7 @@ spec:
             path: /-/healthy
             port: http
       volumes:
-      securityContext: 
-        fsGroup: 1001020000
-        runAsGroup: 1001020000
-        runAsNonRoot: true
-        runAsUser: 1001020000
+      securityContext: {}
 ---
 # Source: cost-analyzer/charts/thanos/templates/store-deployment.yaml
 apiVersion: apps/v1
@@ -18969,7 +18945,7 @@ spec:
       app.kubernetes.io/component: store
 
 
-  strategy: 
+  strategy:
     type: Recreate
 
   template:
@@ -19020,7 +18996,7 @@ spec:
         - name: data
           mountPath: /var/thanos/store
         resources:
-          
+
           requests:
             memory: 2.5Gi
       volumes:
@@ -19030,11 +19006,7 @@ spec:
       - name: config-volume
         secret:
           secretName: kubecost-thanos
-      securityContext: 
-        fsGroup: 1001020000
-        runAsGroup: 1001020000
-        runAsNonRoot: true
-        runAsUser: 1001020000
+      securityContext: {}
 ---
 # Source: cost-analyzer/templates/cost-analyzer-deployment-template.yaml
 apiVersion: apps/v1
@@ -19042,7 +19014,7 @@ kind: Deployment
 metadata:
   name: kubecost-cost-analyzer
   labels:
-    
+
     app.kubernetes.io/name: cost-analyzer
     helm.sh/chart: cost-analyzer-1.98.0-rc.4
     app.kubernetes.io/instance: kubecost
@@ -19064,16 +19036,12 @@ spec:
   template:
     metadata:
       labels:
-        
+
         app.kubernetes.io/name: cost-analyzer
         app.kubernetes.io/instance: kubecost
         app: cost-analyzer
     spec:
-      securityContext:
-        runAsUser: 1001020000
-        runAsNonRoot: true
-        runAsGroup: 1001020000
-        fsGroup: 1001020000
+      securityContext: {}
       restartPolicy: Always
       serviceAccountName: kubecost-cost-analyzer
       volumes:
@@ -19089,7 +19057,7 @@ spec:
       initContainers:
       containers:
         - image: gcr.io/kubecost1/cost-model:prod-1.98.0-rc.4
-        
+
           name: cost-model
           imagePullPolicy: Always
           securityContext:
@@ -19209,7 +19177,7 @@ spec:
             - name: MAX_QUERY_CONCURRENCY
               value: "5"
             - name: UTC_OFFSET
-              value: 
+              value:
             - name: THANOS_ENABLED
               value: "true"
             - name: THANOS_QUERY_URL
@@ -19237,7 +19205,7 @@ spec:
                   name: kubecost-cost-analyzer
                   key: kubecost-token
         - image: gcr.io/kubecost1/frontend:prod-1.98.0-rc.4
-        
+
           env:
             - name: GET_HOSTS_FROM
               value: dns

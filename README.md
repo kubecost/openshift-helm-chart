@@ -41,7 +41,11 @@ Update CLUSTER_NAME and other configuration in [values-openshift.yaml](values-op
 Then install against the local cost-analyzer repo using following helm install command:
 
 ```bash
-helm upgrade --install kubecost --repo https://raw.githubusercontent.com/kubecost/openshift-helm-chart/main cost-analyzer --namespace kubecost --create-namespace -f https://raw.githubusercontent.com/kubecost/openshift-helm-chart/main/values-openshift.yaml
+helm upgrade --install kubecost \
+ --repo https://raw.githubusercontent.com/kubecost/openshift-helm-chart/1.98.0-rc.4/ cost-analyzer \
+ --namespace kubecost --create-namespace \
+ -f https://raw.githubusercontent.com/kubecost/openshift-helm-chart/1.98.0-rc.4/cost-analyzer/values-thanos.yaml
+ -f https://raw.githubusercontent.com/kubecost/openshift-helm-chart/1.98.0-rc.4/cost-analyzer/disable-psps.yaml
 ```
 
 Wait for all pods to be ready.
@@ -55,9 +59,9 @@ Kubecost will be collecting data, please wait 5-15 minutes before the UI to refl
 #### Prerequisites:
 
 - You have created a Grafana Cloud account & You have permissions to create Grafana Cloud API keys
-- Add required service account for grafana-agent to `hostmount-anyuid` SCC:
+- Add required service account for grafana-agent to `hostmount-65532` SCC:
 
-`oc adm policy add-scc-to-user hostmount-anyuid system:serviceaccount:kubecost:grafana-agent`
+`oc adm policy add-scc-to-user hostmount-65532 system:serviceaccount:kubecost:grafana-agent`
 
 #### Installation:
 
