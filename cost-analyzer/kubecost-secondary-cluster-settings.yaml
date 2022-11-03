@@ -9,6 +9,8 @@ global:
     enabled: false
     proxy: false
 prometheus:
+  nodeExporter:
+    enabled: false
   kubeStateMetrics:
     enabled: false
   kube-state-metrics:

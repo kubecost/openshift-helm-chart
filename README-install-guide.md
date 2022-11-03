@@ -14,7 +14,9 @@ helm upgrade --install kubecost \
 **1. Customize the configuration:**
 
 _Cluster Name:_
-All clusters need to have a unique cluster name, update CLUSTER_NAME and other configuration in [values-openshift.yaml](./cost-analyzer/values-openshift.yaml), save to your local repo.
+All clusters need to have a unique cluster name, update CLUSTER_NAME and any other configurations in [values-custom.yaml](./cost-analyzer/values-custom.yaml), save to your local repo.
+
+ > Note: All changes to the helm install should be done in to the values-custom.yaml, leaving all other value files as is.
 
 _Shared Storage:_
 Each cluster will write to a shared object-store (S3/Thanos compatible). See [this repo](https://github.com/kubecost/poc-common-configurations) for example object-store.yaml configurations under the appropriate provider. Any Thanos supported storage will work.
@@ -24,7 +26,7 @@ oc create secret generic kubecost-thanos --from-file=object-store.yaml=[/path/to
 ```
 
 _Cloud Integration:_
-Cloud Integration is optional. If enabled, Kubecost will pull actual billing from the cloud provider to reconcile the short-term OnDemand prices with actual. See [this repo](https://github.com/kubecost/poc-common-configurations) for examples for each cloud provider.
+Cloud Integration is optional and only used on a primary cluster. If enabled, Kubecost will pull actual billing from the cloud provider to reconcile the short-term OnDemand prices with actual. See [this repo](https://github.com/kubecost/poc-common-configurations) for examples for each cloud provider.
 
  > Note that on-prem custom pricing is supported as well. Contact us for help with this.
 
@@ -40,10 +42,12 @@ helm upgrade --install kubecost \
  -f https://raw.githubusercontent.com/kubecost/openshift-helm-chart/1.98.0-rc.4/cost-analyzer/disable-psps.yaml \
  -f https://raw.githubusercontent.com/kubecost/openshift-helm-chart/1.98.0-rc.4/cost-analyzer/values-thanos.yaml \
  -f https://raw.githubusercontent.com/kubecost/openshift-helm-chart/1.98.0-rc.4/cost-analyzer/kubecost-primary-cluster-settings.yaml \
- -f values-openshift.yaml
+ -f values-custom.yaml
 ```
 
 **3. Install Kubecost `agent-only` Clusters:
+
+ > Note: values-custom.yaml should have a unique cluster name for each cluster
 
 ```bash
 helm upgrade --install kubecost \
@@ -52,7 +56,7 @@ helm upgrade --install kubecost \
  -f https://raw.githubusercontent.com/kubecost/openshift-helm-chart/1.98.0-rc.4/cost-analyzer/disable-psps.yaml \
  -f https://raw.githubusercontent.com/kubecost/openshift-helm-chart/1.98.0-rc.4/cost-analyzer/values-thanos.yaml \
  -f https://raw.githubusercontent.com/kubecost/openshift-helm-chart/1.98.0-rc.4/cost-analyzer/kubecost-secondary-cluster-settings.yaml \
- -f values-openshift.yaml
+ -f values-custom.yaml
 ```
 
 ### Notes

@@ -1,6 +1,8 @@
 kubecostModel:
   etlCloudAsset: false # set to true to enable kubecost to include out-of-cluster cloud resources  (uses more memory)
 prometheus:
+  nodeExporter:
+    enabled: false
   kubeStateMetrics:
     enabled: false
   kube-state-metrics:
