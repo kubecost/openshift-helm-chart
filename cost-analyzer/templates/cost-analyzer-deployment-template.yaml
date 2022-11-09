@@ -308,13 +308,9 @@ spec:
         {{- else }}
           imagePullPolicy: Always
         {{- end }}
-          securityContext:
-            allowPrivilegeEscalation: false
-            seccompProfile:
-              type: RuntimeDefault
-            capabilities:
-              drop:
-                - ALL
+        {{- if .Values.kubecostModel.containerSecurityContext }}
+          {{- toYaml .Values.kubecostModel.containerSecurityContext | nindent 10 }}
+        {{- end }}
           ports:
           - name: tcp-model
             containerPort: 9003
@@ -924,13 +920,9 @@ spec:
         {{- else }}
           imagePullPolicy: Always
         {{- end }}
-          securityContext:
-            allowPrivilegeEscalation: false
-            seccompProfile:
-              type: RuntimeDefault
-            capabilities:
-              drop:
-                - ALL
+        {{- if .Values.kubecostModel.containerSecurityContext }}
+          {{- toYaml .Values.kubecostFrontend.containerSecurityContext | nindent 10 }}
+        {{- end }}
           readinessProbe:
             httpGet:
               path: /healthz

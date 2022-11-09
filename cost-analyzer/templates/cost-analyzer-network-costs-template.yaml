@@ -35,6 +35,9 @@ spec:
       containers:
       - name: {{ template "cost-analyzer.networkCostsName" . }}
         image: {{ .Values.networkCosts.image }}
+        {{- if .Values.kubecostNetworkCosts.containerSecurityContext }}
+          {{- toYaml .Values.kubecostNetworkCosts.containerSecurityContext | nindent 8 }}
+        {{- end }}
         {{- if .Values.networkCosts.extraArgs }}
         args:
           {{- toYaml .Values.networkCosts.extraArgs | nindent 8 }}
@@ -77,8 +80,6 @@ spec:
         - mountPath: /network-costs/config
           name: network-costs-config
         {{- end }}
-        securityContext:
-          privileged: true
         ports:
         - name: http-server
           containerPort: {{ .Values.networkCosts.port | default 3001 }}

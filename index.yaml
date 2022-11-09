@@ -6,7 +6,7 @@ entries:
         - name: Homepage
           url: https://www.kubecost.com
     apiVersion: v2
-    appVersion: 1.98.0-rc.4
+    appVersion: "1.98.0"
     created: "2022-11-02T00:53:40.289917689-07:00"
     dependencies:
     - condition: global.grafana.enabled
@@ -26,5 +26,5 @@ entries:
     # digest: a251c6bbd5398d3fce7d3f1e7c4349572189cc7eeb88b8ae0760b22dca26f294
     name: cost-analyzer
     urls:
-    - https://github.com/kubecost/openshift-helm-chart/raw/1.98.0-rc.4/cost-analyzer-1.98.0-rc.4.tgz
-    version: 1.98.0-rc.4
+    - https://github.com/kubecost/openshift-helm-chart/raw/1.98.0/cost-analyzer-1.98.0.tgz
+    version: "1.98.0"

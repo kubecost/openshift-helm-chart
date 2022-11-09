@@ -1,5 +1,5 @@
 kubecostModel:
-  etlCloudAsset: false # set to true to enable kubecost to include out-of-cluster cloud resources  (uses more memory)
+  etlCloudAsset: true # set to true to enable kubecost to include out-of-cluster cloud resources  (uses more memory)
 prometheus:
   nodeExporter:
     enabled: false
@@ -10,7 +10,7 @@ prometheus:
 
 # if enabling network costs, also set the given cloud provider to true
 networkCosts:
-  enabled: false
+  enabled: true
   config:
     services:
       amazon-web-services: false

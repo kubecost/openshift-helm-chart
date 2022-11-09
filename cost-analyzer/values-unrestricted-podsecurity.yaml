@@ -1,0 +1,42 @@
+kubecostModel:
+  containerSecurityContext:
+    securityContext: {}
+kubecostFrontend:
+  containerSecurityContext:
+    securityContext: {}
+kubecostNetworkCosts:
+  containerSecurityContext:
+    securityContext: {}
+prometheus:
+  server:
+    containerSecurityContext:
+      securityContext: {}
+  sidecarContainers:
+    containerSecurityContext:
+      securityContext: {}
+  configmapReload:
+    containerSecurityContext:
+      securityContext: {}
+grafana:
+  grafana:
+    containerSecurityContext:
+      securityContext: {}
+  initContainers:
+    containerSecurityContext:
+      securityContext: {}
+  sidecar:
+    containerSecurityContext:
+      securityContext: {}
+thanos:
+  thanosstore:
+    containerSecurityContext:
+      securityContext: {}
+  thanosqueryfrontend:
+    containerSecurityContext:
+      securityContext: {}
+  thanosquery:
+    containerSecurityContext:
+      securityContext: {}
+  thanoscompact:
+    containerSecurityContext:
+      securityContext: {}

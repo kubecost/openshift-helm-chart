@@ -1,7 +1,9 @@
 kubecostProductConfigs:
-  clusterName: CLUSTER_NAME
+  clusterName: YOUR_CLUSTER_NAME
+  # projectID: "11111111"
+  cloudIntegrationSecret: cloud-integration
 prometheus:
   server:
     global:
       external_labels:
-        cluster_id: CLUSTER_NAME
+        cluster_id: YOUR_CLUSTER_NAME

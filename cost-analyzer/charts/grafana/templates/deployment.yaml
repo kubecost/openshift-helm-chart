@@ -44,13 +44,9 @@ spec:
 {{- if .Values.dashboards }}
       initContainers:
         - name: download-dashboards
-          securityContext:
-            allowPrivilegeEscalation: false
-            seccompProfile:
-              type: RuntimeDefault
-            capabilities:
-              drop:
-                - ALL
+        {{- if .Values.initContainers.containerSecurityContext }}
+          {{- toYaml .Values.initContainers.containerSecurityContext | nindent 10 }}
+        {{- end }}
           image: "{{ .Values.downloadDashboardsImage.repository }}:{{ .Values.downloadDashboardsImage.tag }}"
           imagePullPolicy: {{ .Values.downloadDashboardsImage.pullPolicy }}
           command: ["sh", "/etc/grafana/download_dashboards.sh"]
@@ -76,13 +72,9 @@ spec:
       containers:
 {{- if .Values.sidecar.dashboards.enabled }}
         - name: {{ template "grafana.name" . }}-sc-dashboard
-          securityContext:
-            allowPrivilegeEscalation: false
-            seccompProfile:
-              type: RuntimeDefault
-            capabilities:
-              drop:
-                - ALL
+        {{- if .Values.sidecar.containerSecurityContext }}
+          {{- toYaml .Values.sidecar.containerSecurityContext | nindent 10 }}
+        {{- end }}
           image: "{{ .Values.sidecar.image }}"
           imagePullPolicy: {{ .Values.sidecar.imagePullPolicy }}
           env:
@@ -100,13 +92,9 @@ spec:
 {{- end}}
 {{- if .Values.sidecar.datasources.enabled }}
         - name: {{ template "grafana.name" . }}-sc-datasources
-          securityContext:
-            allowPrivilegeEscalation: false
-            seccompProfile:
-              type: RuntimeDefault
-            capabilities:
-              drop:
-                - ALL
+        {{- if .Values.sidecar.containerSecurityContext }}
+          {{- toYaml .Values.sidecar.containerSecurityContext | nindent 10 }}
+        {{- end }}
           image: "{{ .Values.sidecar.image }}"
           imagePullPolicy: {{ .Values.sidecar.imagePullPolicy }}
           env:
@@ -124,13 +112,9 @@ spec:
 {{- end}}
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          securityContext:
-            allowPrivilegeEscalation: false
-            seccompProfile:
-              type: RuntimeDefault
-            capabilities:
-              drop:
-                - ALL
+        {{- if .Values.grafana.containerSecurityContext }}
+          {{- toYaml .Values.grafana.containerSecurityContext | nindent 10 }}
+        {{- end }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           volumeMounts:
             - name: config
