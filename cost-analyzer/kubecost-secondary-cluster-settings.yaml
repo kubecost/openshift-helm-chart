@@ -29,7 +29,7 @@ thanos:
 
 # if enabling network costs, also set the given cloud provider to true
 networkCosts:
-  enabled: false
+  enabled: true
   config:
     services:
       amazon-web-services: false

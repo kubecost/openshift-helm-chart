@@ -1,12 +1,12 @@
+kubecostDeployment:
+  podSecurityContext: {}
 kubecostModel:
-  containerSecurityContext:
-    securityContext: {}
+  containerSecurityContext: {}
 kubecostFrontend:
-  containerSecurityContext:
-    securityContext: {}
+  containerSecurityContext: {}
 kubecostNetworkCosts:
-  containerSecurityContext:
-    securityContext: {}
+  podSecurityContext: {}
+  containerSecurityContext: {}
 prometheus:
   server:
     containerSecurityContext:

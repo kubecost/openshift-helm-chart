@@ -1,12 +1,7 @@
 kubecostModel:
   etlCloudAsset: true # set to true to enable kubecost to include out-of-cluster cloud resources  (uses more memory)
-prometheus:
-  nodeExporter:
-    enabled: false
-  kubeStateMetrics:
-    enabled: false
-  kube-state-metrics:
-    disabled: true
+kubecostProductConfigs:
+  # grafanaURL: http://grafana.apps.openshiftapps.com/
 
 # if enabling network costs, also set the given cloud provider to true
 networkCosts:
@@ -16,3 +11,18 @@ networkCosts:
       amazon-web-services: false
       google-cloud-services: false
       azure-cloud-services: false
+
+# optional
+global:
+  grafana:
+    enabled: true
+    proxy: true
+
+# not required:
+prometheus:
+  nodeExporter:
+    enabled: false
+  kubeStateMetrics:
+    enabled: false
+  kube-state-metrics:
+    disabled: true

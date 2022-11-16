@@ -2,7 +2,9 @@
 
 ## Overview
 
-This repository is designed to be an easy guide for the most common configurations of Kubecost in OpenShift clusters. It does not replace our [published documentation](https://guide.kubecost.com/) which will have details for many more use cases.
+This repository is designed to be an easy guide for the most common configurations of Kubecost in OpenShift clusters and may be used where cluster security requirements are more locked down than is typical in standard distributions. It does not replace our [published documentation](https://guide.kubecost.com/) which will have details for many more use cases.
+
+The Kubecost version used in this helm cart uses GA release containers. The primary difference are helm templates have been modified to allow securityContext configuration changes and additional value-file templates.
 
 ---
 

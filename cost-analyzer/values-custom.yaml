@@ -1,6 +1,5 @@
 kubecostProductConfigs:
   clusterName: YOUR_CLUSTER_NAME
-  # projectID: "11111111"
   cloudIntegrationSecret: cloud-integration
 prometheus:
   server:

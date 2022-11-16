@@ -26,6 +26,6 @@ entries:
     digest: b4fc6cdeb1d06325c1a183bfbbfa54020f87167fec8a584c30328ebcf3d35fa8
     name: cost-analyzer
     urls:
-    - kubecost-1.98.0-rc4.1.tgz
+    - kubecost-1.98.0-rc4.2.tgz
     version: 1.98.0
 generated: "2022-11-10T12:51:09.397504141Z"

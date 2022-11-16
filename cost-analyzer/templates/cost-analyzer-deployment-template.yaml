@@ -50,7 +50,10 @@ spec:
 {{- end }}
 {{- end }}
     spec:
-      securityContext: {}
+      {{- if .Values.kubecostDeployment.podSecurityContext }}
+      securityContext:
+        {{- toYaml .Values.kubecostDeployment.podSecurityContext | nindent 8 }}
+      {{- end }}
       restartPolicy: Always
       serviceAccountName: {{ template "cost-analyzer.serviceAccountName" . }}
       volumes:
@@ -60,6 +63,8 @@ spec:
             defaultMode: 420
             secretName: kubecost-thanos
       {{- end }}
+        - name: tmp
+          emptyDir: {}
         - name: nginx-conf
           configMap:
             name: nginx-conf
@@ -253,7 +258,8 @@ spec:
             - name: persistent-db
               mountPath: /var/db
             {{- end }}
-          securityContext: {}
+          securityContext:
+            runAsUser: 0
 {{ end }}
       containers:
         {{- if .Values.global.amp.enabled }}
@@ -303,13 +309,14 @@ spec:
           args:
           {{- toYaml .Values.kubecostModel.extraArgs | nindent 12 }}
         {{- end }}
+        {{- if .Values.kubecostModel.containerSecurityContext }}
+          securityContext:
+            {{- toYaml .Values.kubecostModel.containerSecurityContext | nindent 12 -}}
+        {{ end }}
         {{- if .Values.kubecostModel.imagePullPolicy }}
           imagePullPolicy: {{ .Values.kubecostModel.imagePullPolicy }}
         {{- else }}
           imagePullPolicy: Always
-        {{- end }}
-        {{- if .Values.kubecostModel.containerSecurityContext }}
-          {{- toYaml .Values.kubecostModel.containerSecurityContext | nindent 10 }}
         {{- end }}
           ports:
           - name: tcp-model
@@ -904,7 +911,13 @@ spec:
             {{ toYaml .Values.kubecostFrontend.extraEnv | nindent 12 }}
             {{- end }}
           name: cost-analyzer-frontend
+        {{- if .Values.kubecostFrontend.containerSecurityContext }}
+          securityContext:
+            {{- toYaml .Values.kubecostFrontend.containerSecurityContext | nindent 12 }}
+        {{ end }}
           volumeMounts:
+            - name: tmp
+              mountPath: /tmp
             - name: nginx-conf
               mountPath: /etc/nginx/conf.d/
             {{- if .Values.kubecostFrontend.tls }}
@@ -919,9 +932,6 @@ spec:
           imagePullPolicy: {{ .Values.kubecostFrontend.imagePullPolicy }}
         {{- else }}
           imagePullPolicy: Always
-        {{- end }}
-        {{- if .Values.kubecostModel.containerSecurityContext }}
-          {{- toYaml .Values.kubecostFrontend.containerSecurityContext | nindent 10 }}
         {{- end }}
           readinessProbe:
             httpGet:

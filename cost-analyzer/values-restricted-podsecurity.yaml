@@ -1,39 +1,35 @@
+kubecostDeployment:
+  podSecurityContext: {}
 kubecostModel:
   containerSecurityContext:
-    securityContext:
-      allowPrivilegeEscalation: false
-      runAsNonRoot: true
-      seccompProfile:
-        type: RuntimeDefault
-      capabilities:
-        drop:
-          - ALL
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    seccompProfile:
+      type: RuntimeDefault
+    capabilities:
+      drop:
+        - ALL
 kubecostFrontend:
   containerSecurityContext:
-    securityContext:
-      allowPrivilegeEscalation: false
-      runAsNonRoot: true
-      seccompProfile:
-        type: RuntimeDefault
-      capabilities:
-        drop:
-          - ALL
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    seccompProfile:
+      type: RuntimeDefault
+    capabilities:
+      drop:
+        - ALL
 kubecostNetworkCosts:
-  containerSecurityContext:
-    securityContext:
-      privileged: true
-      capabilities:
-        drop:
-          - ALL
-      # allowPrivilegeEscalation: false
-      # runAsNonRoot: true
-      seccompProfile:
-        type: RuntimeDefault
+  securityContext: {}
+  containerSecurityContext: {}
+
 prometheus:
   server:
     containerSecurityContext:
       securityContext:
         allowPrivilegeEscalation: false
+        readOnlyRootFilesystem: true
         runAsNonRoot: true
         seccompProfile:
           type: RuntimeDefault
@@ -44,6 +40,7 @@ prometheus:
     containerSecurityContext:
       securityContext:
         allowPrivilegeEscalation: false
+        readOnlyRootFilesystem: true
         runAsNonRoot: true
         seccompProfile:
           type: RuntimeDefault
@@ -54,6 +51,7 @@ prometheus:
     containerSecurityContext:
       securityContext:
         allowPrivilegeEscalation: false
+        readOnlyRootFilesystem: true
         runAsNonRoot: true
         seccompProfile:
           type: RuntimeDefault
@@ -65,6 +63,7 @@ grafana:
     containerSecurityContext:
       securityContext:
         allowPrivilegeEscalation: false
+        readOnlyRootFilesystem: true
         runAsNonRoot: true
         seccompProfile:
           type: RuntimeDefault
@@ -75,6 +74,7 @@ grafana:
     containerSecurityContext:
       securityContext:
         allowPrivilegeEscalation: false
+        readOnlyRootFilesystem: true
         runAsNonRoot: true
         seccompProfile:
           type: RuntimeDefault
@@ -85,6 +85,7 @@ grafana:
     containerSecurityContext:
       securityContext:
         allowPrivilegeEscalation: false
+        readOnlyRootFilesystem: true
         runAsNonRoot: true
         seccompProfile:
           type: RuntimeDefault
@@ -96,6 +97,7 @@ thanos:
     containerSecurityContext:
       securityContext:
         allowPrivilegeEscalation: false
+        readOnlyRootFilesystem: true
         runAsNonRoot: true
         seccompProfile:
           type: RuntimeDefault
@@ -106,6 +108,7 @@ thanos:
     containerSecurityContext:
       securityContext:
         allowPrivilegeEscalation: false
+        readOnlyRootFilesystem: true
         runAsNonRoot: true
         seccompProfile:
           type: RuntimeDefault
@@ -116,6 +119,7 @@ thanos:
     containerSecurityContext:
       securityContext:
         allowPrivilegeEscalation: false
+        readOnlyRootFilesystem: true
         runAsNonRoot: true
         seccompProfile:
           type: RuntimeDefault
@@ -126,6 +130,7 @@ thanos:
     containerSecurityContext:
       securityContext:
         allowPrivilegeEscalation: false
+        readOnlyRootFilesystem: true
         runAsNonRoot: true
         seccompProfile:
           type: RuntimeDefault
