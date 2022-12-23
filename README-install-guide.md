@@ -56,7 +56,7 @@ helm upgrade --install kubecost \
  -f https://raw.githubusercontent.com/kubecost/openshift-helm-chart/1.98.0-rc.4.2/cost-analyzer/disable-psps.yaml \
  -f https://raw.githubusercontent.com/kubecost/openshift-helm-chart/1.98.0-rc.4.2/cost-analyzer/values-thanos.yaml \
  -f https://raw.githubusercontent.com/kubecost/openshift-helm-chart/1.98.0-rc.4.2/cost-analyzer/values-unrestricted-podsecurity.yaml \
- -f https://raw.githubusercontent.com/kubecost/openshift-helm-chart/1.98.0-rc.4.2/cost-analyzer/kubecost-primary-cluster-settings.yaml
+ -f https://raw.githubusercontent.com/kubecost/openshift-helm-chart/1.98.0-rc.4.2/cost-analyzer/kubecost-primary-cluster-settings.yaml \
  -f path-to/values-custom.yaml
 ```
 

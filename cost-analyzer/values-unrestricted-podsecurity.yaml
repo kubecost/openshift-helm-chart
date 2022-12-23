@@ -1,5 +1,11 @@
 kubecostDeployment:
-  podSecurityContext: {}
+  podSecurityContext:
+    capabilities:
+      drop:
+      - ALL
+    runAsUser: 1001070000
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
 kubecostModel:
   containerSecurityContext: {}
 kubecostFrontend:
@@ -9,6 +15,8 @@ kubecostNetworkCosts:
   containerSecurityContext: {}
 prometheus:
   server:
+    # securityContext:
+    #   runAsUser: 1001
     containerSecurityContext:
       securityContext: {}
   sidecarContainers:

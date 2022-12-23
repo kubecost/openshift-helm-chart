@@ -1,5 +1,8 @@
 kubecostDeployment:
-  podSecurityContext: {}
+  podSecurityContext:
+    fsGroup: 1001070000
+    runAsGroup: 1001070000
+    runAsUser: 1001070000
 kubecostModel:
   containerSecurityContext:
     allowPrivilegeEscalation: false
