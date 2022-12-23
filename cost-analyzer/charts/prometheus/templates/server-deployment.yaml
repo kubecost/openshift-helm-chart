@@ -168,6 +168,7 @@ spec:
 {{ toYaml .Values.server.nodeSelector | indent 8 }}
     {{- end }}
     {{- if .Values.server.securityContext }}
+      securityContext:
 {{ toYaml .Values.server.securityContext | indent 8 }}
     {{- end }}
     {{- if .Values.server.tolerations }}
@@ -179,7 +180,6 @@ spec:
 {{ toYaml .Values.server.affinity | indent 8 }}
     {{- end }}
       terminationGracePeriodSeconds: {{ .Values.server.terminationGracePeriodSeconds }}
-      securityContext: {}
       volumes:
         {{- if .Values.selfsignedCertConfigMapName }}
         - name: {{ .Values.selfsignedCertConfigMapName }}
