@@ -18,7 +18,7 @@ kubecostModel:
       type: RuntimeDefault
     capabilities:
       drop:
-          - ALL
+        - ALL
 kubecostFrontend:
   containerSecurityContext:
     allowPrivilegeEscalation: false
@@ -28,7 +28,7 @@ kubecostFrontend:
       type: RuntimeDefault
     capabilities:
       drop:
-          - ALL
+        - ALL
 kubecostNetworkCosts:
   securityContext: {}
   containerSecurityContext: {}
@@ -63,7 +63,7 @@ prometheus:
           type: RuntimeDefault
         capabilities:
           drop:
-              - ALL
+            - ALL
   configmapReload:
     containerSecurityContext:
       securityContext:
@@ -74,7 +74,7 @@ prometheus:
           type: RuntimeDefault
         capabilities:
           drop:
-              - ALL
+            - ALL
 grafana:
   rbac:
     pspEnabled: false
