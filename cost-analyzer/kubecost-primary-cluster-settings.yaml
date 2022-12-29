@@ -1,4 +1,5 @@
 kubecostModel:
+  containerStatsEnabled: true
   etlCloudAsset: true # set to true to enable kubecost to include out-of-cluster cloud resources  (uses more memory)
 kubecostProductConfigs:
   # grafanaURL: http://grafana.apps.openshiftapps.com/

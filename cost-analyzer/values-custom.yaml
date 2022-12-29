@@ -1,6 +1,6 @@
 kubecostProductConfigs:
   clusterName: YOUR_CLUSTER_NAME
-  cloudIntegrationSecret: cloud-integration
+  # cloudIntegrationSecret: cloud-integration
 prometheus:
   server:
     global:
