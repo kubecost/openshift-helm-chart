@@ -4,13 +4,10 @@ kubecostProductConfigs:
   # cloudIntegrationSecret: cloud-integration
 kubecostDeployment:
   podSecurityContext:
-# Note: Un-comment all of this securityContext configs for OCP cluster 4.11+
+# Note: Un-comment these securityContext configs for OCP cluster 4.11+
     # seccompProfile:
     #   type: RuntimeDefault
     runAsNonRoot: true
-    # fsGroup: 1001070000
-    # runAsGroup: 1001070000
-    # runAsUser: 1001070000
 kubecostModel:
   etlCloudAsset: true # set to true to enable kubecost to include out-of-cluster cloud resources  (uses more memory)
   containerStatsEnabled: true
@@ -18,7 +15,7 @@ kubecostModel:
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: true
     runAsNonRoot: true
-# Note: Un-comment all of this securityContext configs for OCP cluster 4.11+
+# Note: Un-comment these securityContext configs for OCP cluster 4.11+
     # seccompProfile:
     #   type: RuntimeDefault
     capabilities:
@@ -29,7 +26,7 @@ kubecostFrontend:
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: true
     runAsNonRoot: true
-# Note: Un-comment all of this securityContext configs for OCP cluster 4.11+
+# Note: Un-comment these securityContext configs for OCP cluster 4.11+
     # seccompProfile:
     #   type: RuntimeDefault
     capabilities:
@@ -57,7 +54,7 @@ prometheus:
         allowPrivilegeEscalation: false
         readOnlyRootFilesystem: true
         runAsNonRoot: true
-# Note: Un-comment all of this securityContext configs for OCP cluster 4.11+
+# Note: Un-comment these securityContext configs for OCP cluster 4.11+
         # seccompProfile:
         #   type: RuntimeDefault
         capabilities:
@@ -69,7 +66,7 @@ prometheus:
         allowPrivilegeEscalation: false
         readOnlyRootFilesystem: true
         runAsNonRoot: true
-# Note: Un-comment all of this securityContext configs for OCP cluster 4.11+
+# Note: Un-comment these securityContext configs for OCP cluster 4.11+
         # seccompProfile:
         #   type: RuntimeDefault
         capabilities:
@@ -81,7 +78,7 @@ prometheus:
         allowPrivilegeEscalation: false
         readOnlyRootFilesystem: true
         runAsNonRoot: true
-# Note: Un-comment all of this securityContext configs for OCP cluster 4.11+
+# Note: Un-comment these securityContext configs for OCP cluster 4.11+
         # seccompProfile:
         #   type: RuntimeDefault
         capabilities:
@@ -96,7 +93,7 @@ grafana:
         allowPrivilegeEscalation: false
         readOnlyRootFilesystem: true
         runAsNonRoot: true
-# Note: Un-comment all of this securityContext configs for OCP cluster 4.11+
+# Note: Un-comment these securityContext configs for OCP cluster 4.11+
         # seccompProfile:
         #   type: RuntimeDefault
         capabilities:
@@ -108,7 +105,7 @@ grafana:
         allowPrivilegeEscalation: false
         readOnlyRootFilesystem: true
         runAsNonRoot: true
-# Note: Un-comment all of this securityContext configs for OCP cluster 4.11+
+# Note: Un-comment these securityContext configs for OCP cluster 4.11+
         # seccompProfile:
         #   type: RuntimeDefault
         capabilities:
@@ -120,7 +117,7 @@ grafana:
         allowPrivilegeEscalation: false
         readOnlyRootFilesystem: true
         runAsNonRoot: true
-# Note: Un-comment all of this securityContext configs for OCP cluster 4.11+
+# Note: Un-comment these securityContext configs for OCP cluster 4.11+
         # seccompProfile:
         #   type: RuntimeDefault
         capabilities:
@@ -133,7 +130,7 @@ thanos:
         allowPrivilegeEscalation: false
         readOnlyRootFilesystem: true
         runAsNonRoot: true
-# Note: Un-comment all of this securityContext configs for OCP cluster 4.11+
+# Note: Un-comment these securityContext configs for OCP cluster 4.11+
         # seccompProfile:
         #   type: RuntimeDefault
         capabilities:
@@ -145,7 +142,7 @@ thanos:
         allowPrivilegeEscalation: false
         readOnlyRootFilesystem: true
         runAsNonRoot: true
-# Note: Un-comment all of this securityContext configs for OCP cluster 4.11+
+# Note: Un-comment these securityContext configs for OCP cluster 4.11+
         # seccompProfile:
         #   type: RuntimeDefault
         capabilities:
@@ -157,7 +154,7 @@ thanos:
         allowPrivilegeEscalation: false
         readOnlyRootFilesystem: true
         runAsNonRoot: true
-# Note: Un-comment all of this securityContext configs for OCP cluster 4.11+
+# Note: Un-comment these securityContext configs for OCP cluster 4.11+
         # seccompProfile:
         #   type: RuntimeDefault
         capabilities:
@@ -169,7 +166,7 @@ thanos:
         allowPrivilegeEscalation: false
         readOnlyRootFilesystem: true
         runAsNonRoot: true
-# Note: Un-comment all of this securityContext configs for OCP cluster 4.11+
+# Note: Un-comment these securityContext configs for OCP cluster 4.11+
         # seccompProfile:
         #   type: RuntimeDefault
         capabilities:
