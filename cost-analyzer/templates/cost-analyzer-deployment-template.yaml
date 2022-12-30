@@ -18,11 +18,19 @@ spec:
   selector:
     matchLabels:
 {{ include "cost-analyzer.selectorLabels" . | nindent 8}}
+{{- if .Values.kubecostDeployment }}
+{{- if .Values.kubecostDeployment.deploymentStrategy }}
+{{- with .Values.kubecostDeployment.deploymentStrategy }}
+  strategy: {{ toYaml . | nindent 4 }}
+{{- end }}
+{{- else }}
   strategy:
     rollingUpdate:
       maxSurge: 1
       maxUnavailable: 1
     type: RollingUpdate
+{{- end }}
+{{- end }}
   template:
     metadata:
       labels:
@@ -42,27 +50,9 @@ spec:
 {{- end }}
 {{- end }}
     spec:
-      {{- if .Values.openshiftDeployment }}
-      securityContext: {}
-      {{- if .Values.kubecostFrontend.tls }}
-      {{- if .Values.kubecostFrontend.tls.enabled }}
+      {{- if .Values.kubecostDeployment.podSecurityContext }}
       securityContext:
-        runAsUser: 0
-      {{- else }}
-      securityContext:
-        runAsUser: 1001
-        runAsGroup: 1001
-        fsGroup: 1001
-      {{- end }}
-      {{- else if lt $nginxPort 1025 }}
-      securityContext:
-        runAsUser: 0
-      {{- end }}
-      {{- else }}
-      securityContext:
-        runAsUser: 1001
-        runAsGroup: 1001
-        fsGroup: 1001
+        {{- toYaml .Values.kubecostDeployment.podSecurityContext | nindent 8 }}
       {{- end }}
       restartPolicy: Always
       serviceAccountName: {{ template "cost-analyzer.serviceAccountName" . }}
@@ -73,6 +63,8 @@ spec:
             defaultMode: 420
             secretName: kubecost-thanos
       {{- end }}
+        - name: tmp
+          emptyDir: {}
         - name: nginx-conf
           configMap:
             name: nginx-conf
@@ -199,6 +191,13 @@ spec:
         {{- end }}
         {{- end }}
         {{- end }}
+        {{- if .Values.federatedETL.federator }}
+        {{- if .Values.federatedETL.federator.enabled }}
+        - name: federator-config
+          configMap:
+            name: {{ template "cost-analyzer.fullname" . }}-federator
+        {{- end }}
+        {{- end }}
         {{- if .Values.extraVolumes }}
         # Extra volume(s)
         {{- toYaml .Values.extraVolumes | nindent 8 }}
@@ -281,7 +280,7 @@ spec:
           {{- if .Values.sigV4Proxy.role_arn }}
           - --role-arn
           - {{ .Values.sigV4Proxy.role_arn }}
-          {{- end }}          
+          {{- end }}
           - --port
           - :{{ .Values.sigV4Proxy.port }}
           ports:
@@ -310,11 +309,22 @@ spec:
           args:
           {{- toYaml .Values.kubecostModel.extraArgs | nindent 12 }}
         {{- end }}
+        {{- if .Values.kubecostModel.containerSecurityContext }}
+          securityContext:
+            {{- toYaml .Values.kubecostModel.containerSecurityContext | nindent 12 -}}
+        {{ end }}
         {{- if .Values.kubecostModel.imagePullPolicy }}
           imagePullPolicy: {{ .Values.kubecostModel.imagePullPolicy }}
         {{- else }}
           imagePullPolicy: Always
         {{- end }}
+          ports:
+          - name: tcp-model
+            containerPort: 9003
+            protocol: TCP
+          - name: tcp-frontend
+            containerPort: 9090
+            protocol: TCP
           resources:
 {{ toYaml .Values.kubecostModel.resources | indent 12 }}
           readinessProbe:
@@ -346,8 +356,14 @@ spec:
             {{- end }}
             {{- if .Values.kubecostModel.federatedStorageConfigSecret }}
             - name: federated-storage-config
-              mountPath: /var/configs/etl
+              mountPath: /var/configs/etl/federated
               readOnly: true
+            {{- end }}
+            {{- if .Values.federatedETL }}
+            {{- if .Values.federatedETL.federator.enabled }}
+            - name: federator-config
+              mountPath: /var/configs/federator
+            {{- end }}
             {{- end }}
             {{- if .Values.kubecostProductConfigs }}
             {{- if .Values.kubecostProductConfigs.productKey }}
@@ -437,6 +453,10 @@ spec:
             - name: APP_CONFIGMAP_NAME
               value: {{ .Values.appConfigmapName }}
             {{- end }}
+            {{- if .Values.kubecostModel.softMemoryLimit }}
+            - name: GOMEMLIMIT
+              value: {{ .Values.kubecostModel.softMemoryLimit }}
+            {{- end }}
             {{- if .Values.assetReportConfigmapName }}
             - name: ASSET_REPORT_CONFIGMAP_NAME
               value: {{ .Values.assetReportConfigmapName }}
@@ -466,8 +486,12 @@ spec:
                   key: prometheus-server-endpoint
             - name: CLOUD_PROVIDER_API_KEY
               value: "AIzaSyDXQPG_MHUEy9neR7stolq6l0ujXmjJlvk" # The GCP Pricing API requires a key.
+            {{- if .Values.kubecostProductConfigs }}
+            {{- if .Values.kubecostProductConfigs.gcpSecretName }}
             - name: GOOGLE_APPLICATION_CREDENTIALS
               value: /var/configs/key.json
+            {{- end }}
+            {{- end }}
             - name: CONFIG_PATH
               value: /var/configs/
             - name: DB_PATH
@@ -615,8 +639,28 @@ spec:
             {{- end }}
             {{- if .Values.kubecostModel.federatedStorageConfigSecret }}
             - name: FEDERATED_STORE_CONFIG
-              value: "/var/configs/etl/federated-store.yaml"
+              value: "/var/configs/etl/federated/federated-store.yaml"
             {{- end }}
+            {{- if or .Values.federatedETL.federatedCluster .Values.kubecostModel.federatedStorageConfigSecret }}
+            - name: FEDERATED_CLUSTER
+              value: "true"
+            {{- end}}
+            {{- if .Values.federatedETL.primaryCluster }}
+            - name: FEDERATED_PRIMARY_CLUSTER
+              value: "true"
+            {{- end}}
+            {{- if .Values.federatedETL.redirectS3Backup }}
+            - name: FEDERATED_REDIRECT_BACKUP
+              value: "true"
+            {{- end}}
+            {{- if .Values.federatedETL.useExistingS3Config }}
+            - name: FEDERATED_USE_EXISTING_CONFIG
+              value: "true"
+            {{- end}}
+            {{- if .Values.federatedETL.federator.enabled }}
+            - name: FEDERATED_FEDERATOR_ENABLED
+              value: "true"
+            {{- end}}
             - name: ETL_STORE_READ_ONLY
               value: {{ (quote .Values.kubecostModel.etlStoreReadOnly) | default (quote false) }}
             - name : ETL_CLOUD_USAGE_ENABLED
@@ -653,6 +697,8 @@ spec:
               value: {{ (quote .Values.kubecostModel.etlAssetReconciliationEnabled) | default (quote true) }}
             - name: ETL_USE_UNBLENDED_COST
               value: {{ (quote .Values.kubecostModel.etlUseUnblendedClost) | default (quote false) }}
+            - name: CONTAINER_STATS_ENABLED
+              value: {{ (quote .Values.kubecostModel.containerStatsEnabled) | default (quote false) }}
             - name: RECONCILE_NETWORK
               value: {{ (quote .Values.kubecostModel.reconcileNetwork) | default (quote true) }}
             {{- if .Values.systemProxy.enabled }}
@@ -805,6 +851,7 @@ spec:
             {{- if not $etlFileStore }}
             {{- fail "Leader/Follower requires kubecostModel.etlFileStoreEnabled be true." }}
             {{- end -}}
+
             {{- if (eq (quote .Values.kubecostModel.etlBucketConfigSecret) "") }}
             {{- fail "Leader/Follower requires kubecostModel.etlBucketConfigSecret be valid." }}
             {{- end -}}
@@ -864,7 +911,13 @@ spec:
             {{ toYaml .Values.kubecostFrontend.extraEnv | nindent 12 }}
             {{- end }}
           name: cost-analyzer-frontend
+        {{- if .Values.kubecostFrontend.containerSecurityContext }}
+          securityContext:
+            {{- toYaml .Values.kubecostFrontend.containerSecurityContext | nindent 12 }}
+        {{ end }}
           volumeMounts:
+            - name: tmp
+              mountPath: /tmp
             - name: nginx-conf
               mountPath: /etc/nginx/conf.d/
             {{- if .Values.kubecostFrontend.tls }}

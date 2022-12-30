@@ -47,6 +47,9 @@ spec:
         {{- if .Values.configmapReload.prometheus.enabled }}
         - name: {{ template "prometheus.name" . }}-{{ .Values.server.name }}-{{ .Values.configmapReload.prometheus.name }}
           image: "{{ .Values.configmapReload.prometheus.image.repository }}:{{ .Values.configmapReload.prometheus.image.tag }}"
+        {{- if .Values.configmapReload.containerSecurityContext }}
+          {{- toYaml .Values.configmapReload.containerSecurityContext | nindent 10 }}
+        {{- end }}
           imagePullPolicy: "{{ .Values.configmapReload.prometheus.image.pullPolicy }}"
           args:
             - --volume-dir=/etc/config
@@ -79,6 +82,9 @@ spec:
 
         - name: {{ template "prometheus.name" . }}-{{ .Values.server.name }}
           image: "{{ .Values.server.image.repository }}:{{ .Values.server.image.tag }}"
+        {{- if .Values.server.containerSecurityContext }}
+          {{- toYaml .Values.server.containerSecurityContext | nindent 10 }}
+        {{- end }}
           imagePullPolicy: "{{ .Values.server.image.pullPolicy }}"
           {{- if .Values.server.env }}
           env:
@@ -151,6 +157,7 @@ spec:
           {{- end }}
       {{- if .Values.server.sidecarContainers }}
       {{- toYaml .Values.server.sidecarContainers | nindent 8 }}
+      {{- toYaml .Values.sidecarContainers.containerSecurityContext | nindent 10 }}
       {{- end }}
     {{- if .Values.imagePullSecrets }}
       imagePullSecrets:

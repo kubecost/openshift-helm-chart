@@ -50,6 +50,9 @@ spec:
       containers:
       - name: thanos-query
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        {{- if .Values.thanosquery.containerSecurityContext }}
+          {{- toYaml .Values.thanosquery.containerSecurityContext | nindent 8 }}
+        {{- end }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         args:
         - "query"

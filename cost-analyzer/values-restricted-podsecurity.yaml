@@ -1,7 +1,3 @@
-# Security Context settings for Redhat OpenShift cluster:
-kubecostProductConfigs:
-  clusterName: YOUR_CLUSTER_NAME
-  # cloudIntegrationSecret: cloud-integration
 kubecostDeployment:
   podSecurityContext:
 # Note: Un-comment these securityContext configs for OCP cluster 4.11+
@@ -10,7 +6,6 @@ kubecostDeployment:
     runAsNonRoot: true
 kubecostModel:
   etlCloudAsset: true # set to true to enable kubecost to include out-of-cluster cloud resources  (uses more memory)
-  containerStatsEnabled: true
   containerSecurityContext:
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: true
@@ -37,18 +32,7 @@ kubecostNetworkCosts:
   containerSecurityContext: {}
 
 prometheus:
-  nodeExporter:
-    enabled: false
-  kubeStateMetrics:
-    enabled: false
-  kube-state-metrics:
-    disabled: true
-  podSecurityPolicy:
-    enabled: false
   server:
-    global:
-      external_labels:
-        cluster_id: YOUR_CLUSTER_NAME 
     containerSecurityContext:
       securityContext:
         allowPrivilegeEscalation: false
@@ -172,25 +156,3 @@ thanos:
         capabilities:
           drop:
             - ALL
-
-# Disable Pod Security Policy (PSP)
-# Kubecost PSP
-podSecurityPolicy:
-    enabled: false
-
-# Network Costs PSP
-networkCosts:
-  enabled: false # if enabling network costs, also set the given cloud provider to true
-  config:
-    services:
-      amazon-web-services: false
-      google-cloud-services: false
-      azure-cloud-services: false
-  podSecurityPolicy:
-    enabled: false
-
-# optional
-global:
-  grafana:
-    enabled: false
-    proxy: false

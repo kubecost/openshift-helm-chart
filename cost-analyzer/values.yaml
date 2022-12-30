@@ -2,7 +2,7 @@ global:
   # zone: cluster.local (use only if your DNS server doesn't live in the same zone as kubecost)
   prometheus:
     enabled: true # If false, Prometheus will not be installed -- please read this before disabling: https://github.com/kubecost/docs/blob/main/custom-prom.md
-    fqdn: http://cost-analyzer-prometheus-server.default.svc #example address of a prometheus to connect to. Include protocol (http:// or https://) Ignored if enabled: true
+    fqdn: http://cost-analyzer-prometheus-server.kubecost.svc #example address of a prometheus to connect to. Include protocol (http:// or https://) Ignored if enabled: true
     # insecureSkipVerify : false # If true, kubecost will not check the TLS cert of prometheus
     # queryServiceBasicAuthSecretName: dbsecret # kubectl create secret generic dbsecret -n kubecost --from-file=USERNAME --from-file=PASSWORD
     # queryServiceBearerTokenSecretName: mcdbsecret  # kubectl create secret generic mcdbsecret -n kubecost --from-file=TOKEN
@@ -29,7 +29,7 @@ global:
     remoteWriteService: https://aps-workspaces.us-west-2.amazonaws.com/workspaces/<workspaceId>/api/v1/remote_write # The remote_write endpoint for the AMP workspace.
     sigv4:
       region: us-west-2
-      # access_key: ACCESS_KEY # AWS Access key 
+      # access_key: ACCESS_KEY # AWS Access key
       # secret_key: SECRET_KEY # AWS Secret key
       # role_arn: ROLE_ARN # AWS role arn
       # profile: PROFILE # AWS profile
@@ -96,7 +96,6 @@ global:
     alertmanager: # Supply an alertmanager FQDN to receive notifications from the app.
       enabled: false # If true, allow kubecost to write to your alertmanager
       fqdn: http://cost-analyzer-prometheus-server.default.svc #example fqdn. Ignored if prometheus.enabled: true
-
 
    # Set saved report(s) accessible from reports.html
    # Ref: http://docs.kubecost.com/saved-reports
@@ -200,6 +199,7 @@ oidc:
   authURL: "https://my.auth.server/authorize" # endpoint for login to auth server
   loginRedirectURL: "http://my.kubecost.url/model/oidc/authorize" # Kubecost url configured in provider for redirect after authentication
   discoveryURL: "https://my.auth.server/.well-known/openid-configuration" # url for OIDC endpoint discovery
+#  hostedDomain: "example.com" # optional, blocks access to the auth domain specified in the hd claim of the provider ID token
 
 # Adds an httpProxy as an environment variable. systemProxy.enabled must be `true`to have any effect.
 # Ref: https://www.oreilly.com/library/view/security-with-go/9781788627917/5ea6a02b-3d96-44b1-ad3c-6ab60fcbbe4f.xhtml
@@ -270,10 +270,13 @@ kubecostMetrics:
       annotations: {}
 
     # Service Monitor for Kubecost Metrics
-    serviceMonitor:
+    serviceMonitor: # the kubecost included prometheus uses scrapeConfigs and does not support service monitors. The following options assume an existing prometheus that supports serviceMonitors.
       enabled: false
       additionalLabels: {}
-
+      networkCosts:
+        enabled: false
+        scrapeTimeout: 10s
+        additionalLabels: {}
     ## PriorityClassName
     ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
     priorityClassName: []
@@ -320,6 +323,20 @@ kubecostModel:
   etlHourlyStoreDurationHours: 49
   # For deploying kubecost in a cluster that does not self-monitor
   etlReadOnlyMode: false
+
+  # Enables or disables the ContainerStats pipeline, used for quantile-based
+  # queries like for request sizing recommendations.
+  # ContainerStats provides support for quantile-based request right-sizing
+  # recommendations.
+  #
+  # It is disabled by default to avoid problems in extremely high-scale Thanos
+  # environments. If you would like to try quantile-based request-sizing
+  # recommendations, enable this! If you are in a high-scale environment,
+  # please monitor Kubecost logs, Thanos query logs, and Thanos load closely.
+  # We hope to make major improvements at scale here soon!
+  #
+  # containerStatsEnabled: false
+
   # max number of concurrent Prometheus queries
   maxQueryConcurrency: 5
   resources:
@@ -455,6 +472,8 @@ prometheus:
         - source_labels: [__meta_kubernetes_pod_label_app]
           action: keep
           regex:  {{ template "cost-analyzer.networkCostsName" . }}
+  serviceAccount:
+    annotations: {}
   server:
     # If clusterIDConfigmap is defined, instead use user-generated configmap with key CLUSTER_ID
     # to use as unique cluster ID in kubecost cost-analyzer deployment.
@@ -553,7 +572,7 @@ networkCosts:
   enabled: false
   podSecurityPolicy:
     enabled: false
-  image: gcr.io/kubecost1/kubecost-network-costs:v16.0
+  image: gcr.io/kubecost1/kubecost-network-costs:v16.2
   imagePullPolicy: Always
   updateStrategy:
     type: RollingUpdate
@@ -581,8 +600,8 @@ networkCosts:
       # In Zone contains a list of address/range that will be
       # classified as in zone.
       in-zone:
-        # Loopback
-        - "127.0.0.1"
+        # Loopback Addresses in "IANA IPv4 Special-Purpose Address Registry"
+        - "127.0.0.0/8"
         # IPv4 Link Local Address Space
         - "169.254.0.0/16"
         # Private Address Ranges in RFC-1918
@@ -661,6 +680,11 @@ kubecostDeployment:
   replicas: 1
   leaderFollower:
     enabled: false
+  # deploymentStrategy:
+  #   rollingUpdate:
+  #     maxSurge: 1
+  #     maxUnavailable: 1
+  #   type: RollingUpdate
 
 # Kubecost Cluster Controller for Right Sizing and Cluster Turndown
 clusterController:
@@ -683,9 +707,13 @@ reporting:
   # googleAnalyticsTag is only included in our Enterprise offering.
   # googleAnalyticsTag: G-XXXXXXXXX
 
-serviceMonitor:
+serviceMonitor: # the kubecost included prometheus uses scrapeConfigs and does not support service monitors. The following options assume an existing prometheus that supports serviceMonitors.
   enabled: false
   additionalLabels: {}
+  networkCosts:
+    enabled: false
+    scrapeTimeout: 10s
+    additionalLabels: {}
 
 prometheusRule:
   enabled: false
@@ -707,6 +735,7 @@ grafana:
   rbac:
     # Manage the Grafana Pod Security Policy
     pspEnabled: true
+  securityContext: {}
   datasources:
     datasources.yaml:
       apiVersion: 1
@@ -741,12 +770,32 @@ awsstore:
   useAwsStore: false
   createServiceAccount: false
 
+federatedETL:
+  # federatedCluster indicates whether this cluster should push data to the Federated store
+  federatedCluster: false
+  # primaryCluster indicates whether this cluster should load data from the combined section of the Federated store
+  primaryCluster: false
+  # redirectS3Backup changes the dir of S3 backup to the Federated combined store, for using Thanos-federated data in the Federated ETL
+  # Note S3 backup should be enabled separately for this.
+  redirectS3Backup: false
+  # useExistingS3Config will attempt to use existing object-store.yaml configs for S3 backup/Thanos as config for the Federated store
+  useExistingS3Config: false
+  federator:
+    # federationCutoffDate is an RFC 3339-formatted string. All ETL files with windows that fall before this time are not processed by the Federator.
+    # If this is not set, the Federator will process all files regardless of date.
+    # federationCutoffDate: "2022-10-18T00:00:00.000Z"
+    # federator.enabled enables the federator to run inside the costmodel container, federating the data in the Federated store
+    enabled: false
+    # federator.clusters is an optional whitelist of clusters by cluster id.
+    # If not set, the federator will attempt to federated all clusters pushing to the federated storage.
+    clusters: []
+
 # readonly: false # disable updates to kubecost from the frontend UI and via POST request
 
 # These configs can also be set from the Settings page in the Kubecost product UI
 # Values in this block override config changes in the Settings UI on pod restart
 #
-#kubecostProductConfigs:
+# kubecostProductConfigs:
 # An optional list of cluster definitions that can be added for frontend access. The local
 # cluster is *always* included by default, so this list is for non-local clusters.
 # Ref: https://github.com/kubecost/docs/blob/master/multi-cluster.md
@@ -800,14 +849,14 @@ awsstore:
 #  projectID: "123456789"  # Also known as AccountID on AWS -- the current account/project that this instance of Kubecost is deployed on.
 #  gcpSecretName: gcp-secret # Name of a secret representing the gcp service key
 #  bigQueryBillingDataDataset: billing_data.gcp_billing_export_v1_01AC9F_74CF1D_5565A2
-#  labelMappingConfigs:  # names of k8s labels used to designate different allocation concepts
+#  labelMappingConfigs:  # names of k8s labels or annotations used to designate different allocation concepts
 #    enabled: true
 #    owner_label: "owner"
 #    team_label: "team"
 #    department_label: "dept"
 #    product_label: "product"
 #    environment_label: "env"
-#    namespace_external_label: "kubernetes_namespace" # external labels are used to map external cloud costs to kubernetes concepts
+#    namespace_external_label: "kubernetes_namespace" # external labels/tags are used to map external cloud costs to kubernetes concepts
 #    cluster_external_label: "kubernetes_cluster"
 #    controller_external_label: "kubernetes_controller"
 #    product_external_label: "kubernetes_label_app"
