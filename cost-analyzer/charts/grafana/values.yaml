@@ -37,6 +37,9 @@ image:
 
 securityContext: {}
 
+grafana:
+  containerSecurityContext: {}
+
 downloadDashboardsImage:
   repository: curlimages/curl
   tag: latest
@@ -65,6 +68,7 @@ ingress:
     # kubernetes.io/tls-acme: "true"
   labels: {}
   path: /
+  pathType: Prefix
   hosts:
     - chart-example.local
   tls: []
@@ -253,7 +257,7 @@ smtp:
 ## Sidecars that collect the configmaps with specified label and stores the included files them into the respective folders
 ## Requires at least Grafana 5 to work and can't be used together with parameters dashboardProviders, datasources and dashboards
 sidecar:
-  image: kiwigrid/k8s-sidecar:1.19.2
+  image: kiwigrid/k8s-sidecar:1.21.0
   imagePullPolicy: IfNotPresent
   resources:
 #   limits:

@@ -855,7 +855,10 @@ server:
   ## Security context to be added to server pods
   ##
   securityContext:
+    # runAsUser: 1001
     runAsNonRoot: true
+    # runAsGroup: 1001
+    # fsGroup: 1001
 
   service:
     annotations: {}
@@ -1252,7 +1255,7 @@ serverFiles:
 
         metric_relabel_configs:
           - source_labels: [ __name__ ]
-            regex: (kubelet_volume_stats_used_bytes) # this metric is in alpha
+            regex: (kubelet_volume_stats_used_bytes) # this metric is in alpha 
             action: keep
 
       # Scrape config for service endpoints.
