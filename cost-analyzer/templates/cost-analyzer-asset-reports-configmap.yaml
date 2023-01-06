@@ -1,5 +1,5 @@
-{{- if .Values.global.assetReports }}
-{{- if .Values.global.assetReports.enabled }}
+{{- if and .Values.global.assetReports
+           .Values.global.assetReports.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -9,5 +9,3 @@ metadata:
 data:
   asset-reports.json: '{{ toJson .Values.global.assetReports.reports }}'
 {{- end -}}
-{{- end -}}
-

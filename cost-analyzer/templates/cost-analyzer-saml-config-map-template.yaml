@@ -1,5 +1,5 @@
-{{- if .Values.saml }}
-{{- if .Values.saml.enabled }}
+{{- if and .Values.saml
+           .Values.saml.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -9,5 +9,4 @@ metadata:
 data:
 {{- $root := . }}
     saml.json: '{{ toJson .Values.saml }}'
-{{- end -}}
 {{- end -}}

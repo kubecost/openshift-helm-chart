@@ -1,5 +1,5 @@
-{{- if .Values.kubecostProductConfigs -}}
-{{- if .Values.kubecostProductConfigs.metricsConfigs -}}
+{{- if and .Values.kubecostProductConfigs
+           .Values.kubecostProductConfigs.metricsConfigs -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -8,5 +8,4 @@ metadata:
     {{ include "cost-analyzer.commonLabels" . | nindent 4 }}
 data:
   metrics.json: '{{ toJson .Values.kubecostProductConfigs.metricsConfigs }}'
-{{- end -}}
 {{- end -}}

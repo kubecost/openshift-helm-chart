@@ -1,6 +1,6 @@
-{{- if .Values.remoteWrite -}}
-{{- if .Values.remoteWrite.postgres -}}
-{{- if .Values.remoteWrite.postgres.enabled -}}
+{{- if and .Values.remoteWrite
+           .Values.remoteWrite.postgres
+           .Values.remoteWrite.postgres.enabled -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -52,6 +52,4 @@ spec:
       nodeSelector:
         {{- toYaml . | nindent 10 }}
       {{- end }}
-{{- end }}
-{{- end }}
 {{- end }}

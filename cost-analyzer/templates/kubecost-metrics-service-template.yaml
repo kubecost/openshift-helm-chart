@@ -1,6 +1,6 @@
-{{- if .Values.kubecostMetrics }}
-{{- if .Values.kubecostMetrics.exporter }}
-{{- if .Values.kubecostMetrics.exporter.enabled }}
+{{- if and .Values.kubecostMetrics
+           .Values.kubecostMetrics.exporter
+           .Values.kubecostMetrics.exporter.enabled }}
 {{- $prometheusScrape := ternary .Values.kubecostMetrics.exporter.prometheusScrape true (kindIs "bool" .Values.kubecostMetrics.exporter.prometheusScrape) }}
 apiVersion: v1
 kind: Service
@@ -27,6 +27,4 @@ spec:
   selector:
     app: {{ template "kubecost.kubeMetricsName" . }}
   type: ClusterIP
-{{- end }}
-{{- end }}
 {{- end }}

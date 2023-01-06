@@ -1,8 +1,8 @@
-{{- if (.Values.kubecostModel.etlToDisk | default true) -}}
-{{- if .Values.persistentVolume -}}
-{{- if not .Values.persistentVolume.dbExistingClaim -}}
-{{- if .Values.persistentVolume.enabled -}}
-{{- if .Values.persistentVolume.dbPVEnabled -}}
+{{- if and (.Values.kubecostModel.etlToDisk | default true)
+           .Values.persistentVolume
+           (not .Values.persistentVolume.dbExistingClaim)
+           .Values.persistentVolume.enabled
+           .Values.persistentVolume.dbPVEnabled -}}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
@@ -22,8 +22,4 @@ spec:
     {{- else }}
       storage: 32.0Gi
     {{ end }}
-{{- end -}}
-{{- end -}}
-{{- end -}}
-{{- end -}}
 {{- end -}}

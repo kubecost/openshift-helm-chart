@@ -1,8 +1,8 @@
-{{- if .Values.networkCosts }}
-{{- if .Values.networkCosts.enabled }}
-{{- if .Capabilities.APIVersions.Has "policy/v1beta1/PodSecurityPolicy" }}
-{{- if .Values.networkCosts.podSecurityPolicy }}
-{{- if .Values.networkCosts.podSecurityPolicy.enabled }}
+{{- if and .Values.networkCosts
+           .Values.networkCosts.enabled
+           .Capabilities.APIVersions.Has "policy/v1beta1/PodSecurityPolicy" }}
+           .Values.networkCosts.podSecurityPolicy
+           .Values.networkCosts.podSecurityPolicy.enabled }}
 apiVersion: {{ include "cost-analyzer.podSecurityPolicy.apiVersion" . }}
 kind: PodSecurityPolicy
 metadata:
@@ -33,8 +33,4 @@ spec:
         rule: RunAsAny
     volumes:
         - '*'
-{{- end }}
-{{- end }}
-{{- end }}
-{{- end }}
 {{- end }}

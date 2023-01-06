@@ -1,5 +1,5 @@
-{{- if .Values.clusterController }}
-{{- if .Values.clusterController.enabled }}
+{{- if and .Values.clusterController
+           .Values.clusterController.enabled }}
 {{- $serviceName := include "cost-analyzer.serviceName" . -}}
 apiVersion: v1
 kind: ServiceAccount
@@ -308,5 +308,4 @@ spec:
         type: string
         description: The next turn up date-time
         jsonPath: .status.nextScaleUpTime
-{{- end }}
 {{- end }}

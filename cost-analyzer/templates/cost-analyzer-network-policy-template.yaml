@@ -1,5 +1,5 @@
-{{- if .Values.networkPolicy -}}
-{{- if .Values.networkPolicy.costAnalyzer.enabled -}}
+{{- if and .Values.networkPolicy
+           .Values.networkPolicy.costAnalyzer.enabled -}}
 kind: NetworkPolicy
 apiVersion: {{ include "cost-analyzer.networkPolicy.apiVersion" . }}
 metadata:
@@ -43,5 +43,4 @@ spec:
 {{ toYaml $rule.ports | indent 9 }}  
 {{- end }}
 {{- end }}
-{{- end -}}
 {{- end -}}

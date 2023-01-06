@@ -1,5 +1,5 @@
-{{- if .Values.oidc }}
-{{- if .Values.oidc.enabled }}
+{{- if and .Values.oidc
+           .Values.oidc.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -18,5 +18,4 @@ data:
         "discoveryURL" : "{{ .Values.oidc.discoveryURL }}",
         "hostedDomain" : "{{ .Values.oidc.hostedDomain }}"
       }
-{{- end -}}
 {{- end -}}

@@ -1,5 +1,5 @@
-{{- if .Values.federatedETL.federator }}
-{{- if .Values.federatedETL.federator.enabled }}
+{{- if and .Values.federatedETL.federator
+           .Values.federatedETL.federator.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -9,5 +9,4 @@ metadata:
 data:
 {{- $root := . }}
     federator.json: '{{ toJson .Values.federatedETL.federator }}'
-{{- end -}}
 {{- end -}}

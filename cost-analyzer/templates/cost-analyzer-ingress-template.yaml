@@ -1,5 +1,5 @@
-{{- if .Values.ingress -}}
-{{- if .Values.ingress.enabled -}}
+{{- if and .Values.ingress
+           .Values.ingress.enabled -}}
 {{- $fullName := include "cost-analyzer.fullname" . -}}
 {{- $serviceName := include "cost-analyzer.serviceName" . -}}
 {{- $ingressPaths := .Values.ingress.paths -}}
@@ -58,5 +58,4 @@ spec:
           {{- end }}
         {{- end }}
   {{- end }}
-{{- end }}
 {{- end }}

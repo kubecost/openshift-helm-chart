@@ -1,6 +1,6 @@
-{{- if .Values.kubecostMetrics }}
-{{- if .Values.kubecostMetrics.exporter }}
-{{- if or .Values.kubecostMetrics.exporter.enabled .Values.agent }}
+{{- if and .Values.kubecostMetrics
+           .Values.kubecostMetrics.exporter }}
+           (or .Values.kubecostMetrics.exporter.enabled .Values.agent) }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -277,6 +277,4 @@ spec:
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-{{- end }}
-{{- end }}
 {{- end }}

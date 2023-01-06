@@ -1,7 +1,7 @@
-{{- if .Values.grafana -}}
-{{- if .Values.grafana.sidecar -}}
-{{- if .Values.grafana.sidecar.dashboards -}}
-{{- if .Values.grafana.sidecar.dashboards.enabled -}}
+{{- if and .Values.grafana
+           .Values.grafana.sidecar
+           .Values.grafana.sidecar.dashboards
+           .Values.grafana.sidecar.dashboards.enabled -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -21,7 +21,4 @@ metadata:
 data:
     prom-benchmark.json: |-
 {{ .Files.Get "prom-benchmark.json" | indent 8 }}
-{{- end -}}
-{{- end -}}
-{{- end -}}
 {{- end -}}

@@ -1,8 +1,8 @@
-{{- if .Values.prometheus }}
-{{- if .Values.prometheus.serverFiles }}
-{{- if .Values.prometheus.serverFiles.rules }}
-{{- if .Values.prometheusRule }}
-{{- if .Values.prometheusRule.enabled }}
+{{- if and .Values.prometheus
+           .Values.prometheus.serverFiles
+           .Values.prometheus.serverFiles.rules
+           .Values.prometheusRule
+           .Values.prometheusRule.enabled }}
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
@@ -14,8 +14,4 @@ metadata:
     {{- end }}
 spec:
   {{ toYaml .Values.prometheus.serverFiles.rules | nindent 2 }}
-{{- end }}
-{{- end }}
-{{- end }}
-{{- end }}
 {{- end }}

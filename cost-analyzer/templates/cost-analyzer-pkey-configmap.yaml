@@ -1,6 +1,6 @@
-{{- if .Values.kubecostProductConfigs }}
-{{- if .Values.kubecostProductConfigs.productKey }}
-{{- if .Values.kubecostProductConfigs.productKey.enabled }}
+{{- if and .Values.kubecostProductConfigs
+           .Values.kubecostProductConfigs.productKey
+           .Values.kubecostProductConfigs.productKey.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -11,6 +11,4 @@ data:
   {{- if .Values.kubecostProductConfigs.productKey.key }}
     key: {{  .Values.kubecostProductConfigs.productKey.key | quote }}
   {{- end -}}
-{{- end -}}
-{{- end -}}
 {{- end -}}

@@ -1,7 +1,7 @@
-{{- if .Values.grafana -}}
-{{- if .Values.grafana.sidecar -}}
-{{- if .Values.grafana.sidecar.datasources -}}
-{{- if .Values.grafana.sidecar.datasources.enabled -}}
+{{- if and .Values.grafana
+           .Values.grafana.sidecar
+           .Values.grafana.sidecar.datasources
+           .Values.grafana.sidecar.datasources.enabled -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -50,7 +50,4 @@ data:
       url: {{ .Values.global.prometheus.fqdn }}
 {{- end }}
 {{- end }}
-{{- end -}}
-{{- end -}}
-{{- end -}}
 {{- end -}}

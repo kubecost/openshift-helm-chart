@@ -1,5 +1,5 @@
-{{- if .Values.priority }}
-{{- if .Values.priority.enabled }}
+{{- if and .Values.priority
+           .Values.priority.enabled }}
 {{- if eq (len .Values.priority.name) 0 }}
 apiVersion: {{ include "cost-analyzer.priorityClass.apiVersion" . }}
 kind: PriorityClass
@@ -10,6 +10,5 @@ metadata:
 value: {{ .Values.priority.value | default "1000000" }}
 globalDefault: false
 description: "Priority class for scheduling the cost-analyzer pod"
-{{- end }}
 {{- end }}
 {{- end }}

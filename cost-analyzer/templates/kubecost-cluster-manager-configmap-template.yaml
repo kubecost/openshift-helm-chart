@@ -1,5 +1,5 @@
-{{- if .Values.kubecostProductConfigs }}
-{{- if .Values.kubecostProductConfigs.clusters }}
+{{- if and .Values.kubecostProductConfigs
+           .Values.kubecostProductConfigs.clusters }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -9,5 +9,4 @@ metadata:
 data:
   default-clusters.yaml: |
 {{- toYaml .Values.kubecostProductConfigs.clusters | nindent 4 }}
-{{- end }}
 {{- end }}

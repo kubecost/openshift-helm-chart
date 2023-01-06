@@ -1,5 +1,5 @@
-{{- if .Values.networkCosts -}}
-{{- if .Values.networkCosts.enabled -}}
+{{- if and .Values.networkCosts
+           .Values.networkCosts.enabled -}}
 apiVersion: {{ include "cost-analyzer.daemonset.apiVersion" . }}
 kind: DaemonSet
 metadata:
@@ -135,5 +135,4 @@ spec:
         hostPath:
           path: /proc/sys/net/netfilter
       {{- end }}
-{{- end }}
 {{- end }}
