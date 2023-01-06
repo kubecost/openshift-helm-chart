@@ -1,4 +1,3 @@
-{{ if .Values.global.grafana.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -48,4 +47,3 @@ spec:
   selector:
     app: {{ template "grafana.name" . }}
     release: {{ .Release.Name }}
-{{ end }}
