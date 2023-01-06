@@ -1,3 +1,6 @@
+route:
+  enabled: true
+
 # Security Context settings for Redhat OpenShift cluster:
 kubecostProductConfigs:
   clusterName: YOUR_CLUSTER_NAME
