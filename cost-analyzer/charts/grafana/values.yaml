@@ -1,3 +1,7 @@
+global:
+  prometheus:
+    enabled: false
+
 rbac:
   create: true
   pspEnabled: true
