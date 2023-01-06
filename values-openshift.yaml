@@ -87,18 +87,17 @@ prometheus:
 grafana:
   rbac:
     pspEnabled: false
-  grafana:
-    containerSecurityContext:
-      securityContext:
-        allowPrivilegeEscalation: false
-        readOnlyRootFilesystem: true
-        runAsNonRoot: true
+  containerSecurityContext:
+    securityContext:
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: true
+      runAsNonRoot: true
 # Note: Un-comment these securityContext configs for OCP cluster 4.11+
-        # seccompProfile:
-        #   type: RuntimeDefault
-        capabilities:
-          drop:
-            - ALL
+      # seccompProfile:
+      #   type: RuntimeDefault
+      capabilities:
+        drop:
+          - ALL
   initContainers:
     containerSecurityContext:
       securityContext:
