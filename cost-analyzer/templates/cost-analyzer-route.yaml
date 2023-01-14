@@ -12,9 +12,7 @@ metadata:
   {{- end }}
 spec:
   {{ if .Values.route.host }}
-  host: "{{ .Values.route.host }}""
-  {{- else }}
-  host: "kubecost-{{ .Release.Namespace }}.apps.okd4.example.com"
+  host: "{{ .Values.route.host }}"
   {{- end }}
   port:
     targetPort: 9090
