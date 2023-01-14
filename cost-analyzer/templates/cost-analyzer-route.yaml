@@ -15,7 +15,7 @@ spec:
   host: "{{ .Values.route.host }}"
   {{- end }}
   port:
-    targetPort: 9090
+    targetPort: tcp-frontend
   tls:
     termination: edge
   to:
