@@ -1,5 +1,5 @@
 route:
-  enabled: true
+  enabled: false
   annotations: {}
   # Add custom dns URL for your route.
   # Example:
