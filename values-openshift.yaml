@@ -1,3 +1,10 @@
+route:
+  enabled: false
+  annotations: {}
+  # Add custom dns URL for your route.
+  # Example:
+  # host: kubecost.apps.okd4.example.com
+
 # Security Context settings for Redhat OpenShift cluster:
 kubecostProductConfigs:
   clusterName: YOUR_CLUSTER_NAME
