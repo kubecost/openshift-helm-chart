@@ -1,0 +1,231 @@
+# RUN THESE COMMANDS FIRST BEFORE APPLYING THIS FILE
+# Note: Scraping the existing node-exporter pods needs TLS and service account and token credentials from openshift-monitoring. Copy them to kubecost project with the following commands:
+
+# oc get secret metrics-client-certs --namespace=openshift-monitoring -o yaml | sed 's/namespace: .*/namespace: kubecost/' | oc apply -f -
+
+# oc create secret generic -n kubecost serviceaccount --from-literal=token=$(oc exec -n openshift-monitoring prometheus-k8s-0 -- cat "/var/run/secrets/kubernetes.io/serviceaccount/token")
+
+# oc get configmap serving-certs-ca-bundle --namespace=openshift-monitoring -o yaml | sed 's/namespace: .*/namespace: kubecost/' | oc apply -f -```
+
+# kubecostProductConfigs:
+#   clusterName: YOUR_CLUSTER_NAME # Context
+#   projectID: YOUR_AWS_ACCOUNT_ID
+  
+  # AWS Cloud Integration
+  # serviceKeySecretName: kubecost-aws-iam-user
+
+  # athenaProjectID: YOUR_AWS_ACCOUNT_ID
+  # athenaBucketName: s3://aws-athena-query-results-kubecost-YOUR_CLUSTER_NAME
+  # athenaRegion: YOUR_AWS_REGION
+  # athenaDatabase: athenacurcfn_kubecost_YOUR_CLUSTER_NAME
+  # athenaTable: kubecost_YOUR_CLUSTER_NAME
+
+  # Spot data
+  # awsSpotDataRegion: YOUR_AWS_REGION
+  # awsSpotDataBucket: kubecost-spot-instance-data-feed-YOUR_BUCKET_NAME
+  # awsSpotDataPrefix: spotdata
+
+  # currencyCode: EUR
+
+# Note: the copied service account token expires in 1 year
+
+prometheus:
+  serverFiles:
+    prometheus.yml:
+      scrape_configs:
+        - job_name: serviceMonitor/openshift-monitoring/node-exporter/0
+          honor_timestamps: true
+          scrape_interval: 15s
+          scrape_timeout: 10s
+          metrics_path: /metrics
+          scheme: https
+          authorization:
+            type: Bearer
+            credentials_file: /etc/config/openshift-serviceaccount/token
+          tls_config:
+            ca_file: /etc/config/openshift-service-ca/service-ca.crt
+            cert_file: /etc/config/metrics-client-certs/tls.crt
+            key_file: /etc/config/metrics-client-certs/tls.key
+            server_name: node-exporter.openshift-monitoring.svc
+            insecure_skip_verify: false
+          follow_redirects: true
+          relabel_configs:
+          - source_labels: [job]
+            separator: ;
+            regex: (.*)
+            target_label: __tmp_prometheus_job_name
+            replacement: $1
+            action: replace
+          - source_labels: [__meta_kubernetes_service_label_app_kubernetes_io_component]
+            separator: ;
+            regex: exporter
+            replacement: $1
+            action: keep
+          - source_labels: [__meta_kubernetes_service_label_app_kubernetes_io_name]
+            separator: ;
+            regex: node-exporter
+            replacement: $1
+            action: keep
+          - source_labels: [__meta_kubernetes_service_label_app_kubernetes_io_part_of]
+            separator: ;
+            regex: openshift-monitoring
+            replacement: $1
+            action: keep
+          - source_labels: [__meta_kubernetes_endpoint_port_name]
+            separator: ;
+            regex: https
+            replacement: $1
+            action: keep
+          - source_labels: [__meta_kubernetes_endpoint_address_target_kind, __meta_kubernetes_endpoint_address_target_name]
+            separator: ;
+            regex: Node;(.*)
+            target_label: node
+            replacement: ${1}
+            action: replace
+          - source_labels: [__meta_kubernetes_endpoint_address_target_kind, __meta_kubernetes_endpoint_address_target_name]
+            separator: ;
+            regex: Pod;(.*)
+            target_label: pod
+            replacement: ${1}
+            action: replace
+          - source_labels: [__meta_kubernetes_namespace]
+            separator: ;
+            regex: (.*)
+            target_label: namespace
+            replacement: $1
+            action: replace
+          - source_labels: [__meta_kubernetes_service_name]
+            separator: ;
+            regex: (.*)
+            target_label: service
+            replacement: $1
+            action: replace
+          - source_labels: [__meta_kubernetes_pod_name]
+            separator: ;
+            regex: (.*)
+            target_label: pod
+            replacement: $1
+            action: replace
+          - source_labels: [__meta_kubernetes_pod_container_name]
+            separator: ;
+            regex: (.*)
+            target_label: container
+            replacement: $1
+            action: replace
+          - source_labels: [__meta_kubernetes_service_name]
+            separator: ;
+            regex: (.*)
+            target_label: job
+            replacement: ${1}
+            action: replace
+          - source_labels: [__meta_kubernetes_service_label_app_kubernetes_io_name]
+            separator: ;
+            regex: (.+)
+            target_label: job
+            replacement: ${1}
+            action: replace
+          - separator: ;
+            regex: (.*)
+            target_label: endpoint
+            replacement: https
+            action: replace
+          - source_labels: [__meta_kubernetes_pod_node_name]
+            separator: ;
+            regex: (.*)
+            target_label: instance
+            replacement: $1
+            action: replace
+          - source_labels: [__address__]
+            separator: ;
+            regex: (.*)
+            modulus: 1
+            target_label: __tmp_hash
+            replacement: $1
+            action: hashmod
+          - source_labels: [__tmp_hash]
+            separator: ;
+            regex: "0"
+            replacement: $1
+            action: keep
+          kubernetes_sd_configs:
+          - role: endpoints
+            kubeconfig_file: ""
+            follow_redirects: true
+            namespaces:
+              names:
+              - openshift-monitoring
+        - job_name: prometheus
+          static_configs:
+          - targets:
+            - localhost:9090
+        - bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+          job_name: kubernetes-nodes-cadvisor
+          kubernetes_sd_configs:
+          - role: node
+          metric_relabel_configs:
+          - action: keep
+            regex: (container_cpu_usage_seconds_total|container_memory_working_set_bytes|container_network_receive_errors_total|container_network_transmit_errors_total|container_network_receive_packets_dropped_total|container_network_transmit_packets_dropped_total|container_memory_usage_bytes|container_cpu_cfs_throttled_periods_total|container_cpu_cfs_periods_total|container_fs_usage_bytes|container_fs_limit_bytes|container_cpu_cfs_periods_total|container_fs_inodes_free|container_fs_inodes_total|container_fs_usage_bytes|container_fs_limit_bytes|container_cpu_cfs_throttled_periods_total|container_cpu_cfs_periods_total|container_network_receive_bytes_total|container_network_transmit_bytes_total|container_fs_inodes_free|container_fs_inodes_total|container_fs_usage_bytes|container_fs_limit_bytes|container_spec_cpu_shares|container_spec_memory_limit_bytes|container_network_receive_bytes_total|container_network_transmit_bytes_total|container_fs_reads_bytes_total|container_network_receive_bytes_total|container_fs_writes_bytes_total|container_fs_reads_bytes_total|cadvisor_version_info)
+            source_labels:
+            - __name__
+          - action: replace
+            regex: (.+)
+            source_labels:
+            - container
+            target_label: container_name
+          - action: replace
+            regex: (.+)
+            source_labels:
+            - pod
+            target_label: pod_name
+          relabel_configs:
+          - action: labelmap
+            regex: __meta_kubernetes_node_label_(.+)
+          - replacement: kubernetes.default.svc:443
+            target_label: __address__
+          - regex: (.+)
+            replacement: /api/v1/nodes/$1/proxy/metrics/cadvisor
+            source_labels:
+            - __meta_kubernetes_node_name
+            target_label: __metrics_path__
+          scheme: https
+          tls_config:
+            ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+            insecure_skip_verify: true
+  nodeExporter:
+    enabled: false
+  serviceAccounts:
+    nodeExporter:
+      create: false
+#   kube-state-metrics:
+#     disabled: true
+#   server:
+#     # # Fix: err="open /prometheus/queries.active: permission denied" (kubecost-prometheus-server)
+#     # securityContext:
+#     #   runAsUser: 0
+#     global:
+#       external_labels:
+#         cluster_id: YOUR_CLUSTER_NAME
+#     # Extra secrets/configmap mounts that are used in the Prometheus ConfigMap needed for node-exporter
+#     # We are scraping existing node-exporter pods from openshift-monitoring namespace to avoid running the daemonset again
+#     extraSecretMounts:
+#       - name: openshift-serviceaccount-token-mount
+#         mountPath: /etc/config/openshift-serviceaccount
+#         secretName: serviceaccount
+#         readOnly: true
+#       - name: openshift-metrics-client-mount
+#         mountPath: /etc/config/metrics-client-certs
+#         secretName: metrics-client-certs
+#         readOnly: true
+#     extraConfigmapMounts:
+#       - name: openshift-service-ca-mount
+#         mountPath: /etc/config/openshift-service-ca
+#         configMap: serving-certs-ca-bundle
+#         readOnly: true
+# # networkCosts:
+# #   enabled: true
+# #   # Avoid binding on nodeport 3001
+# #   port: 9501
+# global:
+#   grafana:
+#     enabled: false
+#     proxy: false
