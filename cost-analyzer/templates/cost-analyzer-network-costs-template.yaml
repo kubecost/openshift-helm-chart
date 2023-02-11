@@ -4,8 +4,12 @@ apiVersion: {{ include "cost-analyzer.daemonset.apiVersion" . }}
 kind: DaemonSet
 metadata:
   name: {{ template "cost-analyzer.networkCostsName" . }}
+  namespace: {{ .Release.Namespace }}
   labels:
     {{- include "cost-analyzer.commonLabels" . | nindent 4 }}
+{{- if .Values.networkCosts.additionalLabels }}
+{{ toYaml .Values.networkCosts.additionalLabels | indent 4 }}
+{{- end }}
 spec:
   {{- if .Values.networkCosts.updateStrategy }}
   updateStrategy:
@@ -98,6 +102,8 @@ spec:
         - mountPath: /network-costs/config
           name: network-costs-config
         {{- end }}
+        securityContext:
+          privileged: true
         ports:
         - name: http-server
           containerPort: {{ .Values.networkCosts.port | default 3001 }}

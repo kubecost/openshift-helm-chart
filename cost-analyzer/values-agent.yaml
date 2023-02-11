@@ -11,6 +11,12 @@ global:
 # with enhancements designed for external hosting.
 agent: true
 # agentKeySecretName: kubecost-agent-object-store
+agentCsi:
+  enabled: false
+  secretProvider:
+    name: kubecost-agent-object-store-secretprovider
+    provider:
+    parameters: {}
 
 # No Grafana configuration is required.
 grafana:
@@ -39,9 +45,9 @@ prometheus:
       storage.tsdb.min-block-duration: 2h
       storage.tsdb.max-block-duration: 2h
       storage.tsdb.retention: 10h
-    securityContext: {}
-      # runAsNonRoot: true
-      # runAsUser: 1001
+    securityContext:
+      runAsNonRoot: true
+      runAsUser: 1001
     extraSecretMounts:
       - name: object-store-volume
         mountPath: /etc/thanos/config
@@ -51,9 +57,9 @@ prometheus:
     sidecarContainers:
     - name: thanos-sidecar
       image: thanosio/thanos:v0.22.0
-      securityContext: {}
-        # runAsNonRoot: true
-        # runAsUser: 1001
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
       args:
       - sidecar
       - --log.level=debug
