@@ -4,6 +4,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "thanos.componentname" (list $ "query") }}
+  namespace: {{ .Release.Namespace }}
   labels:
     app.kubernetes.io/name: {{ include "thanos.name" . }}
     helm.sh/chart: {{ include "thanos.chart" . }}
@@ -50,9 +51,6 @@ spec:
       containers:
       - name: thanos-query
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-        {{- if .Values.thanosquery.containerSecurityContext }}
-          {{- toYaml .Values.thanosquery.containerSecurityContext | nindent 8 }}
-        {{- end }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         args:
         - "query"

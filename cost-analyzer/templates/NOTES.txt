@@ -1,8 +1,30 @@
 
 
 --------------------------------------------------
+{{- $node := (lookup "v1" "Node" "" "") }}
+{{- $isEKS := (regexMatch ".*eks.*" (.Capabilities.KubeVersion | quote) )}}
+{{- $isGT22 := (semverCompare ">=1.23-0" .Capabilities.KubeVersion.GitVersion) }}
+{{- $PVNotExists := (empty (lookup "v1" "PersistentVolume" "" "")) }}
+{{- $EBSCSINotExists := (empty (lookup "apps/v1" "Deployment" "kube-system" "ebs-csi-controller")) }}
+
 {{- $servicePort := .Values.service.port | default 9090 -}}
 Kubecost has been successfully installed.
+
+{{ if (and $isEKS $isGT22) -}}
+
+WARNING: ON EKS v1.23+ INSTALLATION OF EBS-CSI DRIVER IS REQUIRED TO MANAGE PERSISTENT VOLUMES. LEARN MORE HERE: https://docs.kubecost.com/install-and-configure/install/provider-installations/aws-eks-cost-monitoring#prerequisites
+
+{{ if (and $EBSCSINotExists $PVNotExists) -}}
+
+ERROR: MISSING EBS-CSI DRIVER WHICH IS REQUIRED ON EKS v1.23+ TO MANAGE PERSISTENT VOLUMES. LEARN MORE HERE: https://docs.kubecost.com/install-and-configure/install/provider-installations/aws-eks-cost-monitoring#prerequisites
+
+{{ else if (and $EBSCSINotExists (not $PVNotExists)) -}}
+
+ERROR: MISSING EBS-CSI DRIVER WHICH IS REQUIRED ON EKS v1.23+ TO MANAGE PERSISTENT VOLUMES. LEARN MORE HERE: https://docs.kubecost.com/install-and-configure/install/provider-installations/aws-eks-cost-monitoring#prerequisites
+
+{{ end -}}
+{{ end -}}
+
 
 Please allow 5-10 minutes for Kubecost to gather metrics.
 
@@ -10,8 +32,8 @@ If you have configured cloud-integrations, it can take up to 48 hours for cost r
 
 When using Durable storage (Enterprise Edition), please allow up to 4 hours for data to be collected and the UI to be healthy.
 
-{{- if and .Values.route
-           .Values.route.enabled }}
+{{- if .Values.route -}}
+{{- if .Values.route.enabled -}}
   {{ if .Values.route.host }}
 When pods are Ready, you can open a browser to https://{{ .Values.route.host }}
   {{ else }}
@@ -20,10 +42,12 @@ When pods are Ready, you can find out the hostname which kubecost will serve wit
     kubectl --namespace {{ .Release.Namespace }} get route {{ template "cost-analyzer.fullname" . }}-route -o jsonpath='{.status.ingress[0].host}'
   {{ end }}
 {{- else -}}
+
 When pods are Ready, you can enable port-forwarding with the following command:
 
     kubectl port-forward --namespace {{ .Release.Namespace }} deployment/{{ template "cost-analyzer.fullname" . }} {{ $servicePort }}
 
 Next, navigate to http://localhost:{{ $servicePort }} in a web browser.
+{{- end }}
 {{- end }}
 Having installation issues? View our Troubleshooting Guide at http://docs.kubecost.com/troubleshoot-install

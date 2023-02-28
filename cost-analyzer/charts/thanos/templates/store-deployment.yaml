@@ -4,6 +4,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "thanos.componentname" (list $ "store") }}
+  namespace: {{ .Release.Namespace }}
   labels:
     app.kubernetes.io/name: {{ include "thanos.name" . }}
     helm.sh/chart: {{ include "thanos.chart" . }}
@@ -48,9 +49,6 @@ spec:
       containers:
       - name: thanos-store
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-        {{- if .Values.thanosstore.containerSecurityContext }}
-          {{- toYaml .Values.thanosstore.containerSecurityContext | nindent 8 }}
-        {{- end }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         args:
         - "store"

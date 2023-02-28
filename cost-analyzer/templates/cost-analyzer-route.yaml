@@ -1,5 +1,5 @@
-{{- if and .Values.route
-           .Values.route.enabled -}}
+{{- if .Values.route -}}
+{{- if .Values.route.enabled -}}
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
@@ -23,4 +23,5 @@ spec:
     name: {{ template "cost-analyzer.serviceName" . }}
     weight: 100
   wildcardPolicy: None
+{{- end }}
 {{- end }}
