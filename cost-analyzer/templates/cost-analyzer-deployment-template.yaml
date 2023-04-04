@@ -1,4 +1,4 @@
-{{- if not .Values.agent }}
+{{- if and (not .Values.agent) (not .Values.cloudAgent) }}
 {{- $nginxPort := int .Values.service.port | default 9090 -}}
 apiVersion: apps/v1
 kind: Deployment
@@ -77,6 +77,12 @@ spec:
           To opt out of ETL backups, set .Values.kubecostModel.etlBucketConfigSecret=""
         */}}
         {{- $etlBackupBucketSecret := "" }}
+        {{- if .Values.global.containerSecuritycontext }}
+        - name: tmp
+          emptyDir: { }
+        - name: cache
+          emptyDir: { }
+        {{- end }}
         {{- if .Values.kubecostModel.etlBucketConfigSecret }}
             {{- $etlBackupBucketSecret = .Values.kubecostModel.etlBucketConfigSecret }}
         {{- else if and .Values.global.thanos.enabled (ne (typeOf .Values.kubecostModel.etlBucketConfigSecret) "string") }}
@@ -169,6 +175,20 @@ spec:
               path: kc.crt
             - key: tls.key
               path: kc.key
+        {{- end }}
+        {{- end }}
+        {{- if .Values.kubecostAdmissionController }}
+        {{- if .Values.kubecostAdmissionController.enabled }}
+        {{- if .Values.kubecostAdmissionController.secretName }}
+        - name: webhook-server-tls
+          secret:
+            secretName: {{ .Values.kubecostAdmissionController.secretName }}
+            items:
+            - key: tls.crt
+              path: tls.crt
+            - key: tls.key
+              path: tls.key
+        {{- end }}
         {{- end }}
         {{- end }}
         {{- if .Values.saml }}
@@ -345,6 +365,19 @@ spec:
             initialDelaySeconds: 30
             periodSeconds: 10
             failureThreshold: 200
+          {{- if .Values.kubecostFrontend.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 9003
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            failureThreshold: 200
+          {{- end }}
+          {{- if .Values.global.containerSecuritycontext }}
+          securityContext:
+          {{- toYaml .Values.global.containerSecuritycontext | nindent 12 }}
+          {{- end }}
           volumeMounts:
             {{- if .Values.hosted }}
             - name: config-store
@@ -369,6 +402,14 @@ spec:
             - name: federated-storage-config
               mountPath: /var/configs/etl/federated
               readOnly: true
+            {{- end }}
+            {{- if .Values.kubecostAdmissionController }}
+            {{- if .Values.kubecostAdmissionController.enabled }}
+            {{- if .Values.kubecostAdmissionController.secretName }}
+            - name: {{ .Values.kubecostAdmissionController.secretName }}
+              mountPath: /certs
+            {{- end }}
+            {{- end }}
             {{- end }}
             {{- if .Values.federatedETL }}
             {{- if .Values.federatedETL.federator.enabled }}
@@ -524,6 +565,10 @@ spec:
             {{- if .Values.kubecostProductConfigs.ingestPodUID }}
             - name: INGEST_POD_UID
               value: {{ (quote .Values.kubecostProductConfigs.ingestPodUID) }}
+            {{- end }}
+            {{- if .Values.kubecostProductConfigs.regionOverrides }}
+            - name: REGION_OVERRIDE_LIST
+              value: {{ (quote .Values.kubecostProductConfigs.regionOverrides) }}
             {{- end }}
             {{- end }}
             - name: REMOTE_WRITE_PASSWORD
@@ -873,6 +918,10 @@ spec:
             - name: GOOGLE_ANALYTICS_TAG
               value: {{ .Values.reporting.googleAnalyticsTag }}
             {{- end }}
+            {{- if .Values.costEventsAudit }}
+            - name: COST_EVENTS_AUDIT_ENABLED
+              value: {{ (quote .Values.costEventsAudit.enabled) | default (quote false) }}
+            {{- end }}
             {{- /*
               Leader/Follower has baseline requirements before enabling:
                 * ETL FileStore Enabled
@@ -956,6 +1005,12 @@ spec:
               mountPath: /tmp
             - name: nginx-conf
               mountPath: /etc/nginx/conf.d/
+            {{- if .Values.global.containerSecuritycontext }}
+            - mountPath: /var/cache/nginx
+              name: cache
+            - mountPath: /var/run
+              name: tmp
+            {{- end }}
             {{- if .Values.kubecostFrontend.tls }}
             {{- if .Values.kubecostFrontend.tls.enabled }}
             - name: tls
@@ -976,6 +1031,19 @@ spec:
             initialDelaySeconds: 30
             periodSeconds: 10
             failureThreshold: 200
+          {{- if .Values.kubecostFrontend.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 9003
+            initialDelaySeconds: {{ .Values.kubecostFrontend.livenessProbe.initialDelaySeconds  }}
+            periodSeconds: {{ .Values.kubecostFrontend.livenessProbe.periodSeconds  }}
+            failureThreshold: {{ .Values.kubecostFrontend.livenessProbe.failureThreshold  }}
+          {{- end }}
+          {{- if .Values.global.containerSecuritycontext }}
+          securityContext:
+          {{- toYaml .Values.global.containerSecuritycontext | nindent 12 }}
+          {{- end }}
     {{- if .Values.imagePullSecrets }}
       imagePullSecrets:
       {{ toYaml .Values.imagePullSecrets | indent 2 }}
