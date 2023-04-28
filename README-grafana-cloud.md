@@ -379,15 +379,15 @@ namespace: "kubecost"
 groups:
   - name: CPU
     rules:
-      - expr: sum(rate(container_cpu_usage_seconds_total{container_name!=""}[5m]))
+      - expr: sum(rate(container_cpu_usage_seconds_total{container!=""}[5m]))
         record: cluster:cpu_usage:rate5m
-      - expr: rate(container_cpu_usage_seconds_total{container_name!=""}[5m])
+      - expr: rate(container_cpu_usage_seconds_total{container!=""}[5m])
         record: cluster:cpu_usage_nosum:rate5m
-      - expr: avg(irate(container_cpu_usage_seconds_total{container_name!="POD", container_name!=""}[5m])) by (container_name,pod_name,namespace)
+      - expr: avg(irate(container_cpu_usage_seconds_total{container!="POD", container!=""}[5m])) by (container,pod,namespace)
         record: kubecost_container_cpu_usage_irate
-      - expr: sum(container_memory_working_set_bytes{container_name!="POD",container_name!=""}) by (container_name,pod_name,namespace)
+      - expr: sum(container_memory_working_set_bytes{container!="POD",container!=""}) by (container,pod,namespace)
         record: kubecost_container_memory_working_set_bytes
-      - expr: sum(container_memory_working_set_bytes{container_name!="POD",container_name!=""})
+      - expr: sum(container_memory_working_set_bytes{container!="POD",container!=""})
         record: kubecost_cluster_memory_working_set_bytes
   - name: Savings
     rules:
