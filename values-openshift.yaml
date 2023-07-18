@@ -49,6 +49,7 @@ prometheus:
     disabled: true
   podSecurityPolicy:
     enabled: false
+  server:
     containerSecurityContext:
       allowPrivilegeEscalation: false
       readOnlyRootFilesystem: true
