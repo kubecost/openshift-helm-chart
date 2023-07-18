@@ -23,7 +23,7 @@ spec:
     type: {{ .Values.deploymentStrategy }}
   {{- if ne .Values.deploymentStrategy "RollingUpdate" }}
     rollingUpdate: null
-  {{- end }}    
+  {{- end }}
   template:
     metadata:
       labels:
@@ -76,6 +76,9 @@ spec:
       containers:
 {{- if .Values.sidecar.dashboards.enabled }}
         - name: {{ template "grafana.name" . }}-sc-dashboard
+        {{- if .Values.sidecar.containerSecurityContext }}
+          {{- toYaml .Values.sidecar.containerSecurityContext | nindent 10 }}
+        {{- end }}
           image: "{{ .Values.sidecar.image.repository }}:{{ .Values.sidecar.image.tag }}"
           imagePullPolicy: {{ .Values.sidecar.image.pullPolicy }}
           env:
@@ -93,6 +96,9 @@ spec:
 {{- end}}
 {{- if .Values.sidecar.datasources.enabled }}
         - name: {{ template "grafana.name" . }}-sc-datasources
+        {{- if .Values.sidecar.containerSecurityContext }}
+          {{- toYaml .Values.sidecar.containerSecurityContext | nindent 10 }}
+        {{- end }}
           image: "{{ .Values.sidecar.image.repository }}:{{ .Values.sidecar.image.tag }}"
           imagePullPolicy: {{ .Values.sidecar.image.pullPolicy }}
           env:
@@ -110,6 +116,9 @@ spec:
 {{- end}}
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        {{- if .Values.grafana.containerSecurityContext }}
+          {{- toYaml .Values.grafana.containerSecurityContext | nindent 10 }}
+        {{- end }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           volumeMounts:
             - name: config

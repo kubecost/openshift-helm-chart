@@ -48,6 +48,9 @@ spec:
         {{- if .Values.configmapReload.prometheus.enabled }}
         - name: {{ template "prometheus.name" . }}-{{ .Values.server.name }}-{{ .Values.configmapReload.prometheus.name }}
           image: "{{ .Values.configmapReload.prometheus.image.repository }}:{{ .Values.configmapReload.prometheus.image.tag }}"
+        {{- if .Values.configmapReload.containerSecurityContext }}
+          {{- toYaml .Values.configmapReload.containerSecurityContext | nindent 10 }}
+        {{- end }}
           imagePullPolicy: "{{ .Values.configmapReload.prometheus.image.pullPolicy }}"
           args:
             - --volume-dir=/etc/config
@@ -129,7 +132,7 @@ spec:
             failureThreshold: {{ .Values.server.livenessProbeFailureThreshold }}
             successThreshold: {{ .Values.server.livenessProbeSuccessThreshold }}
           resources:
-{{ toYaml .Values.server.resources | indent 12 }}
+            {{ toYaml .Values.server.resources | indent 12 }}
           {{- with .Values.server.containerSecurityContext }}
           securityContext:
             {{- toYaml . | nindent 12 }}
