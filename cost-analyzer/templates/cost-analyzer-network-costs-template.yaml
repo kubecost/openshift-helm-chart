@@ -35,18 +35,10 @@ spec:
       {{ toYaml .Values.imagePullSecrets | indent 2 }}
     {{- end }}
       hostNetwork: true
-      {{- if .Values.kubecostNetworkCosts.podSecurityContext }}
-      securityContext:
-        {{- toYaml .Values.kubecostNetworkCosts.podSecurityContext | nindent 8 }}
-      {{- end }}
       serviceAccountName: {{ template "cost-analyzer.serviceAccountName" . }}
       containers:
       - name: {{ template "cost-analyzer.networkCostsName" . }}
         image: {{ .Values.networkCosts.image }}
-        {{- if .Values.kubecostNetworkCosts.containerSecurityContext }}
-        securityContext:
-          {{- toYaml .Values.kubecostNetworkCosts.containerSecurityContext | nindent 10 }}
-        {{- end }}
         {{- if .Values.networkCosts.extraArgs }}
         args:
           {{- toYaml .Values.networkCosts.extraArgs | nindent 8 }}
@@ -88,6 +80,9 @@ spec:
         {{- end }}
         {{- end }}
         {{- end }}
+        {{- if .Values.networkCosts.healthCheckProbes }}
+        {{- toYaml .Values.networkCosts.healthCheckProbes | nindent 8 }}
+        {{- end }}
         volumeMounts:
         {{- if .Values.networkCosts.hostProc }}
         - mountPath: {{ .Values.networkCosts.hostProc.mountPath }}
@@ -104,6 +99,9 @@ spec:
         {{- end }}
         securityContext:
           privileged: true
+        {{- if .Values.networkCosts.additionalSecurityContext }}
+        {{- toYaml .Values.networkCosts.additionalSecurityContext | nindent 10 }}
+        {{- end }}
         ports:
         - name: http-server
           containerPort: {{ .Values.networkCosts.port | default 3001 }}

@@ -23,7 +23,7 @@ spec:
     type: {{ .Values.deploymentStrategy }}
   {{- if ne .Values.deploymentStrategy "RollingUpdate" }}
     rollingUpdate: null
-  {{- end }}    
+  {{- end }}
   template:
     metadata:
       labels:
@@ -45,12 +45,12 @@ spec:
       securityContext:
 {{ toYaml .Values.securityContext | indent 8 }}
 {{- end }}
+{{- if .Values.priorityClassName }}
+      priorityClassName: "{{ .Values.priorityClassName }}"
+{{- end }}
 {{- if .Values.dashboards }}
       initContainers:
         - name: download-dashboards
-        {{- if .Values.initContainers.containerSecurityContext }}
-          {{- toYaml .Values.initContainers.containerSecurityContext | nindent 10 }}
-        {{- end }}
           image: "{{ .Values.downloadDashboardsImage.repository }}:{{ .Values.downloadDashboardsImage.tag }}"
           imagePullPolicy: {{ .Values.downloadDashboardsImage.pullPolicy }}
           command: ["sh", "/etc/grafana/download_dashboards.sh"]
@@ -79,8 +79,8 @@ spec:
         {{- if .Values.sidecar.containerSecurityContext }}
           {{- toYaml .Values.sidecar.containerSecurityContext | nindent 10 }}
         {{- end }}
-          image: "{{ .Values.sidecar.image }}"
-          imagePullPolicy: {{ .Values.sidecar.imagePullPolicy }}
+          image: "{{ .Values.sidecar.image.repository }}:{{ .Values.sidecar.image.tag }}"
+          imagePullPolicy: {{ .Values.sidecar.image.pullPolicy }}
           env:
             - name: LABEL
               value: "{{ .Values.sidecar.dashboards.label }}"
@@ -99,8 +99,8 @@ spec:
         {{- if .Values.sidecar.containerSecurityContext }}
           {{- toYaml .Values.sidecar.containerSecurityContext | nindent 10 }}
         {{- end }}
-          image: "{{ .Values.sidecar.image }}"
-          imagePullPolicy: {{ .Values.sidecar.imagePullPolicy }}
+          image: "{{ .Values.sidecar.image.repository }}:{{ .Values.sidecar.image.tag }}"
+          imagePullPolicy: {{ .Values.sidecar.image.pullPolicy }}
           env:
             - name: LABEL
               value: "{{ .Values.sidecar.datasources.label }}"

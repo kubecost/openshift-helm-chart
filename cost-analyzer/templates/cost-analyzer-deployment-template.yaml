@@ -51,10 +51,6 @@ spec:
 {{- end }}
 {{- end }}
     spec:
-      {{- if .Values.kubecostDeployment.podSecurityContext }}
-      securityContext:
-        {{- toYaml .Values.kubecostDeployment.podSecurityContext | nindent 8 }}
-      {{- end }}
       restartPolicy: Always
       serviceAccountName: {{ template "cost-analyzer.serviceAccountName" . }}
       volumes:
@@ -83,7 +79,7 @@ spec:
         */}}
         {{- $etlBackupBucketSecret := "" }}
         {{- if .Values.global.containerSecuritycontext }}
-        - name: tmp
+        - name: var-run
           emptyDir: { }
         - name: cache
           emptyDir: { }
@@ -235,13 +231,6 @@ spec:
           secret:
             secretName: {{ .Values.oidc.secretName }}
         {{- end }}
-        {{- end }}
-        {{- end }}
-        {{- if .Values.federatedETL.federator }}
-        {{- if .Values.federatedETL.federator.enabled }}
-        - name: federator-config
-          configMap:
-            name: {{ template "cost-analyzer.fullname" . }}-federator
         {{- end }}
         {{- end }}
         {{- if .Values.extraVolumes }}
@@ -396,13 +385,17 @@ spec:
         - image: gcr.io/kubecost1/cost-model:prod-{{ $.Chart.AppVersion }}
         {{ end }}
           name: cost-model
+          {{- with .Values.kubecostModel.containerSecurityContext }}
+          securityContext:
+          {{- toYaml . | nindent 12 }}
+          {{- end }}           
         {{- if .Values.kubecostModel.extraArgs }}
           args:
           {{- toYaml .Values.kubecostModel.extraArgs | nindent 12 }}
         {{- end }}
-        {{- if .Values.kubecostModel.containerSecurityContext }}
+        {{- if .Values.kubecostModel.securityContext }}
           securityContext:
-            {{- toYaml .Values.kubecostModel.containerSecurityContext | nindent 12 -}}
+            {{- toYaml .Values.kubecostModel.securityContext | nindent 12 -}}
         {{ end }}
         {{- if .Values.kubecostModel.imagePullPolicy }}
           imagePullPolicy: {{ .Values.kubecostModel.imagePullPolicy }}
@@ -471,12 +464,6 @@ spec:
             {{- end }}
             {{- end }}
             {{- end }}
-            {{- if .Values.federatedETL }}
-            {{- if .Values.federatedETL.federator.enabled }}
-            - name: federator-config
-              mountPath: /var/configs/federator
-            {{- end }}
-            {{- end }}
             {{- if .Values.kubecostProductConfigs }}
             {{- if .Values.kubecostProductConfigs.productKey }}
             {{- if .Values.kubecostProductConfigs.productKey.secretname }}
@@ -494,7 +481,7 @@ spec:
             {{- end }}
             {{- if .Values.kubecostProductConfigs.cloudIntegrationSecret }}
             - name: cloud-integration
-              mountPath: /var/cloud-integration
+              mountPath: /var/configs/cloud-integration
             {{- end }}
             {{- if or .Values.kubecostProductConfigs.serviceKeySecretName .Values.kubecostProductConfigs.createServiceKeySecret }}
             - name: service-key-secret
@@ -749,7 +736,7 @@ spec:
               value: {{ (quote .Values.kubecostModel.outOfClusterPromMetricsEnabled) | default (quote false) }}
             - name: CACHE_WARMING_ENABLED
               value: {{ (quote .Values.kubecostModel.warmCache) | default (quote true) }}
-            - name: SAVINGS_CACHE_WARMING_ENABLED
+            - name: SAVINGS_ENABLED
               value: {{ (quote .Values.kubecostModel.warmSavingsCache) | default (quote true) }}
             - name: ETL_ENABLED
               value: {{ (quote .Values.kubecostModel.etl) | default (quote true) }}
@@ -780,14 +767,6 @@ spec:
             {{- end}}
             {{- if .Values.federatedETL.redirectS3Backup }}
             - name: FEDERATED_REDIRECT_BACKUP
-              value: "true"
-            {{- end}}
-            {{- if .Values.federatedETL.useExistingS3Config }}
-            - name: FEDERATED_USE_EXISTING_CONFIG
-              value: "true"
-            {{- end}}
-            {{- if .Values.federatedETL.federator.enabled }}
-            - name: FEDERATED_FEDERATOR_ENABLED
               value: "true"
             {{- end}}
             - name: ETL_STORE_READ_ONLY
@@ -842,7 +821,7 @@ spec:
             {{- end }}
             {{- with .Values.kubecostModel.cloudCost }}
             - name: CLOUD_COST_ENABLED
-              value: {{ (quote .enabled) | default (quote false) }}
+              value: {{ (quote .enabled) | default (quote true) }}
             {{- with .labelList }}
             - name: CLOUD_COST_IS_INCLUDE_LIST
               value: {{ (quote .IsIncludeList) | default (quote false) }}
@@ -1059,7 +1038,7 @@ spec:
         {{ end }}
         {{- else }}
         - image: gcr.io/kubecost1/frontend:prod-{{ $.Chart.AppVersion }}
-        {{ end }}
+        {{- end }}
           {{- if .Values.kubecostFrontend.tls }}
           {{- if .Values.kubecostFrontend.tls.enabled }}
           command: ["nginx", "-g", "daemon off;"]
@@ -1071,13 +1050,13 @@ spec:
             - name: GET_HOSTS_FROM
               value: dns
             {{- if .Values.kubecostFrontend.extraEnv -}}
-            {{ toYaml .Values.kubecostFrontend.extraEnv | nindent 12 }}
+            {{- toYaml .Values.kubecostFrontend.extraEnv | nindent 12 }}
             {{- end }}
           name: cost-analyzer-frontend
-        {{- if .Values.kubecostFrontend.containerSecurityContext }}
+          {{- with .Values.kubecostFrontend.containerSecurityContext }}
           securityContext:
-            {{- toYaml .Values.kubecostFrontend.securityContext | nindent 12 }}
-        {{ end }}
+          {{- toYaml . | nindent 12 }}
+          {{- end }}          
           volumeMounts:
             - name: tmp
               mountPath: /tmp
@@ -1087,7 +1066,7 @@ spec:
             - mountPath: /var/cache/nginx
               name: cache
             - mountPath: /var/run
-              name: tmp
+              name: var-run
             {{- end }}
             {{- if .Values.kubecostFrontend.tls }}
             {{- if .Values.kubecostFrontend.tls.enabled }}
