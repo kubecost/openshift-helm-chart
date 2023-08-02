@@ -6,7 +6,7 @@ entries:
         - name: Homepage
           url: https://www.kubecost.com
     apiVersion: v2
-    appVersion: 1.105.0
+    appVersion: 1.105.1
     created: "2023-05-10T12:51:09.407686095Z"
     dependencies:
     - condition: global.grafana.enabled
@@ -26,6 +26,6 @@ entries:
     digest: b4fc6cdeb1d06325c1a183bfbbfa54020f87167fec8a584c30328ebcf3d35fa8
     name: cost-analyzer
     urls:
-    - kubecost-1.105.0.tgz
-    version: 1.105.0
+    - kubecost-1.105.1.tgz
+    version: 1.105.1
 generated: "2023-05-10T12:51:09.397504141Z"
