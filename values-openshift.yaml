@@ -15,8 +15,6 @@ kubecostDeployment:
       type: RuntimeDefault
     runAsNonRoot: true
 kubecostModel:
-  args:
-    test: 1234
   containerSecurityContext:
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: true
