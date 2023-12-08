@@ -1,4 +1,7 @@
-# Kubecost Setup for OpenShift
+# REPOSITORY DEPRECATION
+
+> [!WARNING]  
+> This repository has been deprecated and will be removed in the future. OpenShift support is now available in the main Kubecost cost-analyzer. Please see the cost-analyzer Helm chart repository [here](https://github.com/kubecost/cost-analyzer-helm-chart/).
 
 ## Overview
 
